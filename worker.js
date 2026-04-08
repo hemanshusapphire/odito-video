@@ -28,11 +28,33 @@ class VideoWorker {
     this.backendUrl = backendUrl;
     this.audioService = new AudioService();
     
-    // Dynamic backend path configuration
-    this.backendPublicPath = process.env.BACKEND_PUBLIC_PATH || 
-      path.resolve(__dirname, '../../odito_backend/public');
-    
-    console.log(`[VIDEO_WORKER] Backend public path: ${this.backendPublicPath}`);
+    // Dynamic backend path configuration with auto-detection
+    if (process.env.BACKEND_PUBLIC_PATH) {
+      this.backendPublicPath = process.env.BACKEND_PUBLIC_PATH;
+      console.log(`[VIDEO_WORKER] Backend public path from ENV: ${this.backendPublicPath}`);
+    } else {
+      // Auto-detect correct backend path (handles both odito_backend and odito-backend)
+      const possibleBackendPaths = [
+        path.resolve(__dirname, '../../odito_backend/public'),
+        path.resolve(__dirname, '../../odito-backend/public'),
+        '/root/odito/odito_backend/public',
+        '/root/odito/odito-backend/public'
+      ];
+      
+      console.log(`[VIDEO_WORKER] 🔍 Auto-detecting backend public path...`);
+      
+      this.backendPublicPath = possibleBackendPaths.find(p => fs.existsSync(p));
+      
+      if (!this.backendPublicPath) {
+        console.error(`[VIDEO_WORKER] ❌ Backend public path not found! Tried:`);
+        possibleBackendPaths.forEach((p, i) => {
+          console.error(`[VIDEO_WORKER]   ${i + 1}. ${p} (${fs.existsSync(p) ? 'EXISTS' : 'NOT FOUND'})`);
+        });
+        throw new Error('Backend public path not found - cannot continue');
+      }
+      
+      console.log(`[VIDEO_WORKER] ✅ Auto-detected backend public path: ${this.backendPublicPath}`);
+    }
     
     // MongoDB connection
     const { getDatabaseConfig } = require('./config/env.js');
