@@ -36,8 +36,9 @@ class VideoWorker {
     } else {
       // Auto-detect correct backend path (handles both odito_backend and odito-backend)
       const possibleBackendPaths = [
-        path.resolve(__dirname, '../../odito_backend/public'),
-        path.resolve(__dirname, '../../odito-backend/public'),
+        path.resolve(__dirname, '../odito_backend/public'),    // ← FIXED: Correct relative path
+        path.resolve(__dirname, '../odito-backend/public'),    // ← FIXED: Correct relative path
+        'D:\\new\\Odito\\odito_backend\\public',              // ← ADDED: Windows absolute path
         '/root/odito/odito_backend/public',
         '/root/odito/odito-backend/public'
       ];
