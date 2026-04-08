@@ -260,9 +260,12 @@ class VideoWorker {
           console.log(`[VIDEO_WORKER]   ✅ File exists on disk`);
           console.log(`[VIDEO_WORKER]   🎯 Final duration: ${audioFile.duration.toFixed(2)}s`);
           
+          // CRITICAL FIX: Convert HTTP URL to local file path for Remotion
+          const localAudioPath = this.convertAudioUrlToLocalPath(audioFile.audioPath);
+          
           return {
             ...slide,
-            audio: audioFile.audioPath,
+            audio: localAudioPath,
             duration: audioFile.duration,
             durationInFrames: Math.round(audioFile.duration * 30) // Assuming 30 FPS
           };
@@ -423,6 +426,45 @@ class VideoWorker {
    */
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Convert HTTP audio URL to local file path for Remotion compatibility
+   * @param {string} audioUrl - HTTP URL like http://SERVER_IP:5000/audio/file.mp3
+   * @returns {string} Local file path like /root/odito/odito-backend/public/audio/file.mp3
+   */
+  convertAudioUrlToLocalPath(audioUrl) {
+    // If already a local path, return as-is
+    if (!audioUrl.startsWith('http')) {
+      console.log(`[VIDEO_WORKER] 🎵 Audio already local path: ${audioUrl}`);
+      return audioUrl;
+    }
+
+    console.log(`[VIDEO_WORKER] 🔄 Converting audio URL to local path:`);
+    console.log(`[VIDEO_WORKER]   Original URL: ${audioUrl}`);
+    
+    try {
+      // Extract filename from URL
+      const url = new URL(audioUrl);
+      const filename = path.basename(url.pathname);
+      
+      // Construct local file path using BACKEND_PUBLIC_PATH
+      const localPath = path.join(this.backendPublicPath, 'audio', filename);
+      
+      console.log(`[VIDEO_WORKER]   Converted to: ${localPath}`);
+      
+      // Validate file exists
+      if (!fs.existsSync(localPath)) {
+        throw new Error(`Audio file not found at local path: ${localPath}`);
+      }
+      
+      console.log(`[VIDEO_WORKER]   ✅ File exists locally`);
+      return localPath;
+      
+    } catch (error) {
+      console.error(`[VIDEO_WORKER] ❌ URL conversion failed:`, error.message);
+      throw new Error(`Failed to convert audio URL to local path: ${error.message}`);
+    }
   }
 
   /**
