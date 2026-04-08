@@ -20,8 +20,8 @@ class AudioService {
     // CRITICAL: Validate API keys at initialization
     this.validateApiKeys();
     
-    // CRITICAL FIX: Use single consistent storage location
-    this.OUTPUT_DIR = path.join(__dirname, '../cache/audio');
+    // CRITICAL FIX: Store in public/cache/audio for Remotion staticFile() compatibility
+    this.OUTPUT_DIR = path.join(__dirname, '../public/cache/audio');
     this.CACHE_DIR = path.join(__dirname, '../cache/audio');
     
     // Ensure directories exist

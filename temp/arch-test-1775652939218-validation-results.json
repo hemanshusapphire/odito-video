@@ -1,0 +1,220 @@
+[
+  {
+    "timestamp": "2026-04-08T12:55:39.218Z",
+    "type": "START",
+    "message": "🚀 Starting Audio Architecture Validation"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.220Z",
+    "type": "INFO",
+    "message": "Test Project ID: arch-test-1775652939218"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.220Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.311Z",
+    "type": "INFO",
+    "message": "   Expected OUTPUT_DIR: D:\\new\\Odito\\video\\public\\cache\\audio"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.312Z",
+    "type": "INFO",
+    "message": "   Actual OUTPUT_DIR: D:\\new\\Odito\\video\\public\\cache\\audio"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.312Z",
+    "type": "INFO",
+    "message": "   ✅ AudioService stores in: D:\\new\\Odito\\video\\public\\cache\\audio"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "INFO",
+    "message": "   Test audio file: D:\\new\\Odito\\video\\public\\cache\\audio\\test.mp3"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "INFO",
+    "message": "   Generated staticFile path: cache/audio/test.mp3"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "INFO",
+    "message": "   ✅ Worker generates correct staticFile paths"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.313Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.314Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.315Z",
+    "type": "INFO",
+    "message": "   ✅ Found 15 Audio components using staticFile()"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.315Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.315Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.316Z",
+    "type": "INFO",
+    "message": "   ✅ Found 2 render commands with --public-dir=. flag"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.316Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.316Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.317Z",
+    "type": "INFO",
+    "message": "   ✅ Old HTTP URL logic removed, new validation logic present"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.318Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.318Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.340Z",
+    "type": "INFO",
+    "message": "   Created test audio: D:\\new\\Odito\\video\\public\\cache\\audio\\arch-test-1775652939218-slide-1.mp3"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.340Z",
+    "type": "INFO",
+    "message": "   staticFile() path: cache/audio/arch-test-1775652939218-slide-1.mp3"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.340Z",
+    "type": "INFO",
+    "message": "   Resolved full path: D:\\new\\Odito\\video\\public\\cache\\audio\\arch-test-1775652939218-slide-1.mp3"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.340Z",
+    "type": {
+      "audio": "cache/audio/arch-test-1775652939218-slide-1.mp3",
+      "duration": 2
+    },
+    "message": "   Mock slide data:"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.340Z",
+    "type": "INFO",
+    "message": "   ✅ Complete flow validation successful"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.341Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.341Z",
+    "type": "STEP",
+    "message": "\n🔍 Validating: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.342Z",
+    "type": "INFO",
+    "message": "   video/: .env, .git, .gitignore, .prettierrc, cache, config, env.txt, eslint.config.mjs, node_modules, out, package-lock.json, package.json, props.json, public, remotion.config.ts, scripts, services, src, temp, tsconfig.json, utils, validate-audio-architecture.js, worker.js"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.343Z",
+    "type": "INFO",
+    "message": "   video/public/: cache"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.343Z",
+    "type": "INFO",
+    "message": "   video/public/cache/: audio"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "INFO",
+    "message": "   video/cache/: audio"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "INFO",
+    "message": "   video/src/: components_new, data, debugInterpolate.ts, HelloWorld, HelloWorld.tsx, hooks, index.css, index.ts, slides, theme.ts, types.ts, utils, WorkingRoot.tsx, WorkingVideo.tsx"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "INFO",
+    "message": "   video/services/: audioService.js, audioService.old.js, productionAudioService.js, smartAudioService.js, videoTemplate.service.js, workingAudioService.js"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "INFO",
+    "message": "   ✅ Folder structure validated"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "SUCCESS",
+    "message": "✅ PASSED: "
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "SUMMARY",
+    "message": "\n📊 VALIDATION RESULTS:"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.344Z",
+    "type": "INFO",
+    "message": "   ✅ Passed: 7"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.345Z",
+    "type": "INFO",
+    "message": "   ❌ Failed: 0"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.345Z",
+    "type": "INFO",
+    "message": "   📈 Success Rate: 100.0%"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.345Z",
+    "type": "SUCCESS",
+    "message": "\n🎉 ALL VALIDATIONS PASSED!"
+  },
+  {
+    "timestamp": "2026-04-08T12:55:39.345Z",
+    "type": "SUCCESS",
+    "message": "Audio architecture is ready for production."
+  }
+]

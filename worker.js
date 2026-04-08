@@ -282,9 +282,10 @@ class VideoWorker {
           console.log(`[VIDEO_WORKER]   ✅ File exists on disk`);
           console.log(`[VIDEO_WORKER]   🎯 Final duration: ${audioFile.duration.toFixed(2)}s`);
           
-          // 🔥 CRITICAL FIX: Use relative path for staticFile() compatibility
-          const relativeAudioPath = path.relative(__dirname, audioFile.audioPath);
-          console.log(`[VIDEO_WORKER] 🎵 Using relative path for Remotion: ${relativeAudioPath}`);
+          // 🔥 CRITICAL FIX: Generate cache/audio/file.mp3 path for staticFile()
+          const fileName = path.basename(audioFile.audioPath);
+          const relativeAudioPath = `cache/audio/${fileName}`;
+          console.log(`[VIDEO_WORKER] 🎵 Using staticFile() path: ${relativeAudioPath}`);
           
           // 🔥 DEBUG: Validate path conversion
           console.log(`[VIDEO_WORKER] 🔍 Path conversion debug:`);
@@ -458,83 +459,24 @@ class VideoWorker {
   }
 
   /**
-   * Convert HTTP audio URL to absolute file path for Remotion compatibility
-   * Tries multiple possible audio storage locations in priority order
-   * @param {string} audioUrl - HTTP URL like http://SERVER_IP:5000/audio/file.mp3
-   * @returns {string} Absolute file path like /root/odito/odito_backend/public/audio/file.mp3
+   * Validate staticFile path exists in public directory
+   * @param {string} staticPath - Relative path like "cache/audio/file.mp3"
+   * @returns {boolean} True if file exists
    */
-  convertAudioUrlToLocalPath(audioUrl) {
-    // If already a local path, ensure it's absolute for Remotion
-    if (!audioUrl.startsWith('http')) {
-      console.log(`[VIDEO_WORKER] 🎵 Audio already local path: ${audioUrl}`);
-      
-      // Convert relative path to absolute for Remotion
-      if (!path.isAbsolute(audioUrl)) {
-        const absolutePath = path.resolve(process.cwd(), audioUrl);
-        console.log(`[VIDEO_WORKER] 🔄 Converted relative to absolute: ${absolutePath}`);
-        return absolutePath;
-      }
-      return audioUrl;
-    }
-
-    console.log(`[VIDEO_WORKER] 🔄 Converting audio URL to absolute path:`);
-    console.log(`[VIDEO_WORKER]   Original URL: ${audioUrl}`);
+  validateStaticFile(staticPath) {
+    const fullPath = path.join(__dirname, 'public', staticPath);
+    const exists = fs.existsSync(fullPath);
     
-    try {
-      // Extract filename from URL
-      const url = new URL(audioUrl);
-      const filename = path.basename(url.pathname);
-      
-      // Define all possible audio storage locations in priority order
-      const possiblePaths = [
-        // 1. Backend public directory (primary location for slide audio)
-        path.join(this.backendPublicPath, 'audio', filename),
-        
-        // 2. Video cache directory (secondary location)
-        path.join(__dirname, 'cache', 'audio', filename),
-        
-        // 3. Video public directory (legacy location)
-        path.join(__dirname, 'public', 'audio', filename),
-        
-        // 4. Current working directory + cache/audio (fallback)
-        path.join(process.cwd(), 'cache', 'audio', filename),
-        
-        // 5. Current working directory + public/audio (fallback)
-        path.join(process.cwd(), 'public', 'audio', filename)
-      ];
-      
-      console.log(`[VIDEO_WORKER] 🔍 Trying ${possiblePaths.length} possible paths:`);
-      
-      // Try each path in order
-      for (let i = 0; i < possiblePaths.length; i++) {
-        const candidatePath = possiblePaths[i];
-        console.log(`[VIDEO_WORKER]   Path ${i + 1}: ${candidatePath}`);
-        
-        if (fs.existsSync(candidatePath)) {
-          const stats = fs.statSync(candidatePath);
-          console.log(`[VIDEO_WORKER]   ✅ FOUND at path ${i + 1} (${stats.size} bytes)`);
-          
-          // 🔥 CRITICAL FIX: Return absolute path directly for Remotion
-          console.log(`[VIDEO_WORKER] 🔄 Using absolute path: ${candidatePath}`);
-          
-          return candidatePath;
-        } else {
-          console.log(`[VIDEO_WORKER]   ❌ Not found at path ${i + 1}`);
-        }
-      }
-      
-      // If we get here, no path worked
-      console.error(`[VIDEO_WORKER] ❌ Audio file not found in ANY location:`);
-      possiblePaths.forEach((p, i) => {
-        console.error(`[VIDEO_WORKER]   ${i + 1}. ${p}`);
-      });
-      
-      throw new Error(`Audio file '${filename}' not found in any of ${possiblePaths.length} locations`);
-      
-    } catch (error) {
-      console.error(`[VIDEO_WORKER] ❌ URL conversion failed:`, error.message);
-      throw new Error(`Failed to convert audio URL to absolute path: ${error.message}`);
+    console.log(`[VIDEO_WORKER] 🔍 Validating staticFile: ${staticPath}`);
+    console.log(`[VIDEO_WORKER]   Full path: ${fullPath}`);
+    console.log(`[VIDEO_WORKER]   Exists: ${exists}`);
+    
+    if (exists) {
+      const stats = fs.statSync(fullPath);
+      console.log(`[VIDEO_WORKER]   Size: ${stats.size} bytes`);
     }
+    
+    return exists;
   }
 
   /**
@@ -552,13 +494,14 @@ class VideoWorker {
       const audioPath = slide.audio;
       console.log(`[VIDEO_WORKER]   Slide ${index + 1}: ${audioPath}`);
       
-      // 🔥 CRITICAL FIX: Use absolute paths directly - no HTTP URL conversion needed
-      if (fs.existsSync(audioPath)) {
-        const stats = fs.statSync(audioPath);
+      // 🔥 CRITICAL FIX: Validate staticFile paths in public directory
+      if (this.validateStaticFile(audioPath)) {
+        const fullPath = path.join(__dirname, 'public', audioPath);
+        const stats = fs.statSync(fullPath);
         console.log(`[VIDEO_WORKER]     ✅ Found (${stats.size} bytes)`);
         foundFiles.push({ slide: index + 1, path: audioPath, size: stats.size });
       } else {
-        console.error(`[VIDEO_WORKER]     ❌ MISSING at path: ${audioPath}`);
+        console.error(`[VIDEO_WORKER]     ❌ MISSING staticFile: ${audioPath}`);
         missingFiles.push({ slide: index + 1, path: audioPath });
       }
     });
@@ -1715,7 +1658,8 @@ class VideoWorker {
           `--props=${inputDataPath}`,
           `--duration=${totalDurationInFrames}`, // Dynamic duration override
           '--codec', 'h264',
-          '--pixel-format', 'yuv420p'
+          '--pixel-format', 'yuv420p',
+          '--public-dir=.' // 🔥 CRITICAL: Set public dir for staticFile() resolution
         ];
         
         console.log(`[VIDEO_WORKER] Using remotion binary: ${remotionPath}`);
@@ -1897,7 +1841,8 @@ class VideoWorker {
           `--props=${inputDataPath}`,
           `--duration=${totalDurationInFrames}`, // Dynamic duration override
           '--codec', 'h264',
-          '--pixel-format', 'yuv420p'
+          '--pixel-format', 'yuv420p',
+          '--public-dir=.' // 🔥 CRITICAL: Set public dir for staticFile() resolution
         ];
         
         console.log(`[VIDEO_WORKER] Using remotion binary: ${remotionPath}`);
