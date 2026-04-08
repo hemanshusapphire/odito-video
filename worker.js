@@ -274,20 +274,20 @@ class VideoWorker {
             audioFile.duration = maxDuration;
           }
           
-          // Validate audio file exists on disk
-          const filename = audioFile.audioPath.replace(`${this.backendUrl}/audio/`, '').replace('.mp3', '');
-          if (!this.audioService.audioExists(filename)) {
-            throw new Error(`Audio file not found on disk for slide ${index + 1}: ${filename}`);
+          // Validate audio file exists on disk (absolute path)
+          if (!fs.existsSync(audioFile.audioPath)) {
+            throw new Error(`Audio file not found on disk for slide ${index + 1}: ${audioFile.audioPath}`);
           }
           
           console.log(`[VIDEO_WORKER]   ✅ File exists on disk`);
           console.log(`[VIDEO_WORKER]   🎯 Final duration: ${audioFile.duration.toFixed(2)}s`);
           
-          // 🔥 CRITICAL FIX: Use HTTP URL directly for Remotion (best practice)
-          console.log(`[VIDEO_WORKER] 🎵 Using HTTP URL for Remotion: ${audioFile.audioPath}`);
+          // 🔥 CRITICAL FIX: Use absolute file path for Remotion (no HTTP 404 errors)
+          const absoluteAudioPath = this.convertAudioUrlToLocalPath(audioFile.audioPath);
+          console.log(`[VIDEO_WORKER] 🎵 Using absolute path for Remotion: ${absoluteAudioPath}`);
           return {
             ...slide,
-            audio: audioFile.audioPath, // HTTP URL - no conversion
+            audio: absoluteAudioPath, // Absolute file path - reliable
             duration: audioFile.duration,
             durationInFrames: Math.round(audioFile.duration * 30) // Assuming 30 FPS
           };
@@ -545,23 +545,14 @@ class VideoWorker {
       const audioPath = slide.audio;
       console.log(`[VIDEO_WORKER]   Slide ${index + 1}: ${audioPath}`);
       
-      // 🔥 CRITICAL FIX: Convert HTTP URL to file path for fs.existsSync
-      let filePath = audioPath;
-      if (audioPath.startsWith('http')) {
-        // Extract filename from HTTP URL: http://IP:5000/audio/file.mp3 -> file.mp3
-        const filename = path.basename(new URL(audioPath).pathname);
-        // Convert to actual file path: /video/../../odito_backend/public/audio/file.mp3
-        filePath = path.join(this.backendPublicPath, 'audio', filename);
-        console.log(`[VIDEO_WORKER]   Converted HTTP URL to file path: ${filePath}`);
-      }
-      
-      if (fs.existsSync(filePath)) {
-        const stats = fs.statSync(filePath);
+      // 🔥 CRITICAL FIX: Use absolute paths directly - no HTTP URL conversion needed
+      if (fs.existsSync(audioPath)) {
+        const stats = fs.statSync(audioPath);
         console.log(`[VIDEO_WORKER]     ✅ Found (${stats.size} bytes)`);
-        foundFiles.push({ slide: index + 1, path: audioPath, filePath, size: stats.size });
+        foundFiles.push({ slide: index + 1, path: audioPath, size: stats.size });
       } else {
-        console.error(`[VIDEO_WORKER]     ❌ MISSING at path: ${filePath}`);
-        missingFiles.push({ slide: index + 1, path: audioPath, filePath });
+        console.error(`[VIDEO_WORKER]     ❌ MISSING at path: ${audioPath}`);
+        missingFiles.push({ slide: index + 1, path: audioPath });
       }
     });
     
@@ -571,8 +562,8 @@ class VideoWorker {
     
     if (missingFiles.length > 0) {
       console.error(`[VIDEO_WORKER] ❌ MISSING AUDIO FILES:`);
-      missingFiles.forEach(({ slide, path, filePath }) => {
-        console.error(`[VIDEO_WORKER]   Slide ${slide}: ${path} -> ${filePath}`);
+      missingFiles.forEach(({ slide, path }) => {
+        console.error(`[VIDEO_WORKER]   Slide ${slide}: ${path}`);
       });
       
       throw new Error(`Cannot render video: ${missingFiles.length} audio files are missing. Slides: ${missingFiles.map(m => m.slide).join(', ')}`);
@@ -1625,8 +1616,14 @@ class VideoWorker {
 
   async renderVideoWithSlides(projectId, jobId, slidesWithAudio, auditSnapshot) {
     try {
+      console.log(`[VIDEO_WORKER] 🎬 RENDER VIDEO STARTED`);
+      console.log(`[VIDEO_WORKER] 📊 Project: ${projectId}, Job: ${jobId}`);
+      console.log(`[VIDEO_WORKER] 📋 Slides count: ${slidesWithAudio.length}`);
+      
       // CRITICAL: Validate all audio paths exist before rendering
+      console.log(`[VIDEO_WORKER] 🔍 PRE-RENDER VALIDATION STARTED`);
       this.validateAllAudioPaths(slidesWithAudio);
+      console.log(`[VIDEO_WORKER] ✅ PRE-RENDER VALIDATION PASSED`);
       
       // Dynamic video output path using environment variable or resolved path
       const videoDir = path.join(this.backendPublicPath, 'videos');
@@ -1659,14 +1656,14 @@ class VideoWorker {
         console.log(`[VIDEO_WORKER]   Slide ${index + 1} (${slide.type}): ${slide.duration.toFixed(2)}s = ${slide.durationInFrames} frames`);
       });
       
-      // 🔥 CRITICAL FIX: Use HTTP URLs directly - no conversion needed for Remotion
+      // 🔥 CRITICAL FIX: Use absolute file paths - no HTTP 404 errors
       // DEBUG PRINT: Verify final audio path sent to Remotion
       console.log("FINAL AUDIO PATH SENT TO REMOTION:", slidesWithAudio[0]?.audio);
       
       // Prepare input data for Remotion with slides and per-slide audio - CLEAN OUTPUT
       const inputData = {
         projectId: projectId,
-        slidesWithAudio: slidesWithAudio, // 🔥 USE HTTP URLS DIRECTLY
+        slidesWithAudio: slidesWithAudio, // 🔥 USE ABSOLUTE FILE PATHS
         fps: 30, // Frame rate for duration calculation
         durationInFrames: totalDurationInFrames, // Dynamic total duration
         totalDuration: totalDuration // Pass total duration in seconds for reference

@@ -20,8 +20,8 @@ class AudioService {
     // CRITICAL: Validate API keys at initialization
     this.validateApiKeys();
     
-    // Update paths to use backend's public directory
-    this.OUTPUT_DIR = path.join(__dirname, '../../odito_backend/public/audio');
+    // CRITICAL FIX: Use single consistent storage location
+    this.OUTPUT_DIR = path.join(__dirname, '../cache/audio');
     this.CACHE_DIR = path.join(__dirname, '../cache/audio');
     
     // Ensure directories exist
@@ -159,9 +159,8 @@ class AudioService {
       console.log(`[AUDIO_SERVICE] 📊 Provider used: ${providerUsed}, Size: ${audioBuffer.length} bytes`);
       console.log(`[AUDIO_SERVICE] 🎵 Audio duration will be calculated based on text length and speech rate`);
       
-      // Return PUBLIC URL for Remotion compatibility
-      const mediaUrls = getMediaUrls();
-      return `${mediaUrls.audio}/${projectId}.mp3`;
+      // Return absolute file path for Remotion compatibility
+      return path.join(this.OUTPUT_DIR, `${projectId}.mp3`);
       
     } catch (error) {
       console.error(`[AUDIO_SERVICE] ❌ Audio generation failed for ${projectId}:`, error.message);
@@ -442,9 +441,8 @@ class AudioService {
   copyCachedAudio(cachePath, projectId) {
     const outputPath = path.join(this.OUTPUT_DIR, `${projectId}.mp3`);
     fs.copyFileSync(cachePath, outputPath);
-    // Return HTTP URL for backend access
-    const mediaUrls = getMediaUrls();
-    return `${mediaUrls.audio}/${projectId}.mp3`;
+    // Return absolute file path for backend access
+    return path.join(this.OUTPUT_DIR, `${projectId}.mp3`);
   }
 
   /**
@@ -574,8 +572,7 @@ class AudioService {
    */
   getAudioUrl(projectId) {
     if (this.audioExists(projectId)) {
-      const mediaUrls = getMediaUrls();
-      return `${mediaUrls.audio}/${projectId}.mp3`;
+      return path.join(this.OUTPUT_DIR, `${projectId}.mp3`);
     }
     return null;
   }
@@ -735,8 +732,7 @@ class AudioService {
         // Check if slide audio already exists
         if (this.audioExists(slideProjectId)) {
           console.log(`[AUDIO_SERVICE] ✅ Using existing audio for slide ${slideIndex} (${slideProjectId})`);
-          const mediaUrls = getMediaUrls();
-          const audioPath = `${mediaUrls.audio}/${slideProjectId}.mp3`;
+          const audioPath = path.join(this.OUTPUT_DIR, `${slideProjectId}.mp3`);
           const duration = await this.getAudioDuration(audioPath);
           audioFiles.push({
             slideIndex,
@@ -800,8 +796,7 @@ class AudioService {
         console.log(`[AUDIO_SERVICE] ✅ Slide ${slideIndex} audio saved using ${providerUsed}: ${outputPath}`);
         
         // Get audio duration
-        const mediaUrls = getMediaUrls();
-        const audioPath = `${mediaUrls.audio}/${slideProjectId}.mp3`;
+        const audioPath = path.join(this.OUTPUT_DIR, `${slideProjectId}.mp3`);
         const duration = await this.getAudioDuration(audioPath);
         
         console.log(`[AUDIO_SERVICE] ⏱️ Slide ${slideIndex} duration: ${duration.toFixed(2)}s`);
