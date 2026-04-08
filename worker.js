@@ -282,12 +282,19 @@ class VideoWorker {
           console.log(`[VIDEO_WORKER]   ✅ File exists on disk`);
           console.log(`[VIDEO_WORKER]   🎯 Final duration: ${audioFile.duration.toFixed(2)}s`);
           
-          // 🔥 CRITICAL FIX: Use absolute file path for Remotion (no HTTP 404 errors)
-          const absoluteAudioPath = this.convertAudioUrlToLocalPath(audioFile.audioPath);
-          console.log(`[VIDEO_WORKER] 🎵 Using absolute path for Remotion: ${absoluteAudioPath}`);
+          // 🔥 CRITICAL FIX: Use relative path for staticFile() compatibility
+          const relativeAudioPath = path.relative(__dirname, audioFile.audioPath);
+          console.log(`[VIDEO_WORKER] 🎵 Using relative path for Remotion: ${relativeAudioPath}`);
+          
+          // 🔥 DEBUG: Validate path conversion
+          console.log(`[VIDEO_WORKER] 🔍 Path conversion debug:`);
+          console.log(`[VIDEO_WORKER]   Original absolute: ${audioFile.audioPath}`);
+          console.log(`[VIDEO_WORKER]   Worker directory: ${__dirname}`);
+          console.log(`[VIDEO_WORKER]   Relative path: ${relativeAudioPath}`);
+          console.log(`[VIDEO_WORKER]   File exists: ${fs.existsSync(audioFile.audioPath)}`);
           return {
             ...slide,
-            audio: absoluteAudioPath, // Absolute file path - reliable
+            audio: relativeAudioPath, // Relative path for staticFile()
             duration: audioFile.duration,
             durationInFrames: Math.round(audioFile.duration * 30) // Assuming 30 FPS
           };
@@ -1663,7 +1670,7 @@ class VideoWorker {
       // Prepare input data for Remotion with slides and per-slide audio - CLEAN OUTPUT
       const inputData = {
         projectId: projectId,
-        slidesWithAudio: slidesWithAudio, // 🔥 USE ABSOLUTE FILE PATHS
+        slidesWithAudio: slidesWithAudio, // 🔥 USE RELATIVE PATHS FOR staticFile()
         fps: 30, // Frame rate for duration calculation
         durationInFrames: totalDurationInFrames, // Dynamic total duration
         totalDuration: totalDuration // Pass total duration in seconds for reference

@@ -1,4 +1,4 @@
-import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, Audio } from "remotion";
+import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, Audio, staticFile } from "remotion";
 import { theme } from "./theme";
 
 // Import all 15 required slides (matching worker output)
@@ -89,7 +89,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[0].dur}
@@ -113,7 +113,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[1].dur}
@@ -137,7 +137,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[2].dur}
@@ -161,7 +161,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[3].dur}
@@ -185,7 +185,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[4].dur}
@@ -209,7 +209,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[5].dur}
@@ -233,7 +233,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[6].dur}
@@ -257,7 +257,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[7].dur}
@@ -281,7 +281,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[8].dur}
@@ -305,7 +305,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[9].dur}
@@ -334,7 +334,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[10].dur}
@@ -358,7 +358,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[11].dur}
@@ -382,7 +382,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[12].dur}
@@ -406,7 +406,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
           return (
             <>
               <Audio 
-                src={slide.audio} 
+                src={staticFile(slide.audio)} 
                 volume={1}
                 startFrom={0}
                 endAt={slideTiming[13].dur}
@@ -431,7 +431,7 @@ export const AuditVideo = (props: Record<string, unknown>) => {
             return (
               <>
                 <Audio 
-                  src={slide.audio} 
+                  src={staticFile(slide.audio)} 
                   volume={1}
                   startFrom={0}
                   endAt={slideTiming[14].dur}
