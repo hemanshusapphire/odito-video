@@ -451,19 +451,30 @@ class VideoWorker {
   }
 
   /**
-   * Convert HTTP audio URL to local file path for Remotion compatibility
+   * Convert HTTP audio URL to relative file path for Remotion compatibility
    * Tries multiple possible audio storage locations in priority order
    * @param {string} audioUrl - HTTP URL like http://SERVER_IP:5000/audio/file.mp3
-   * @returns {string} Local file path like /root/odito/odito-backend/public/audio/file.mp3
+   * @returns {string} Relative file path like ../../odito_backend/public/audio/file.mp3
    */
   convertAudioUrlToLocalPath(audioUrl) {
-    // If already a local path, return as-is
+    // If already a local path, convert to relative if it's absolute
     if (!audioUrl.startsWith('http')) {
       console.log(`[VIDEO_WORKER] 🎵 Audio already local path: ${audioUrl}`);
+      
+      // Convert absolute path to relative for Remotion
+      if (audioUrl.startsWith('/')) {
+        let relativePath = path.relative(process.cwd(), audioUrl);
+        
+        // 🔥 Step 2: FIX for Linux - normalize path separators to forward slashes
+        relativePath = relativePath.split(path.sep).join('/');
+        
+        console.log(`[VIDEO_WORKER] 🔄 Converted absolute to relative: ${relativePath}`);
+        return relativePath;
+      }
       return audioUrl;
     }
 
-    console.log(`[VIDEO_WORKER] 🔄 Converting audio URL to local path:`);
+    console.log(`[VIDEO_WORKER] 🔄 Converting audio URL to relative path:`);
     console.log(`[VIDEO_WORKER]   Original URL: ${audioUrl}`);
     
     try {
@@ -499,7 +510,16 @@ class VideoWorker {
         if (fs.existsSync(candidatePath)) {
           const stats = fs.statSync(candidatePath);
           console.log(`[VIDEO_WORKER]   ✅ FOUND at path ${i + 1} (${stats.size} bytes)`);
-          return candidatePath;
+          
+          // 🔥 CRITICAL FIX: Convert absolute path to relative path for Remotion
+          let relativePath = path.relative(process.cwd(), candidatePath);
+          
+          // 🔥 Step 2: FIX for Linux - normalize path separators to forward slashes
+          relativePath = relativePath.split(path.sep).join('/');
+          
+          console.log(`[VIDEO_WORKER] 🔄 Converted to relative path: ${relativePath}`);
+          
+          return relativePath;
         } else {
           console.log(`[VIDEO_WORKER]   ❌ Not found at path ${i + 1}`);
         }
@@ -515,7 +535,7 @@ class VideoWorker {
       
     } catch (error) {
       console.error(`[VIDEO_WORKER] ❌ URL conversion failed:`, error.message);
-      throw new Error(`Failed to convert audio URL to local path: ${error.message}`);
+      throw new Error(`Failed to convert audio URL to relative path: ${error.message}`);
     }
   }
 
