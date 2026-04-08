@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const path = require('path');
 const fs = require('fs');
+const { URL } = require('url');
 const { spawn } = require('child_process');
 const { ObjectId } = require('mongodb');
 
@@ -544,13 +545,23 @@ class VideoWorker {
       const audioPath = slide.audio;
       console.log(`[VIDEO_WORKER]   Slide ${index + 1}: ${audioPath}`);
       
-      if (fs.existsSync(audioPath)) {
-        const stats = fs.statSync(audioPath);
+      // 🔥 CRITICAL FIX: Convert HTTP URL to file path for fs.existsSync
+      let filePath = audioPath;
+      if (audioPath.startsWith('http')) {
+        // Extract filename from HTTP URL: http://IP:5000/audio/file.mp3 -> file.mp3
+        const filename = path.basename(new URL(audioPath).pathname);
+        // Convert to actual file path: /video/../../odito_backend/public/audio/file.mp3
+        filePath = path.join(this.backendPublicPath, 'audio', filename);
+        console.log(`[VIDEO_WORKER]   Converted HTTP URL to file path: ${filePath}`);
+      }
+      
+      if (fs.existsSync(filePath)) {
+        const stats = fs.statSync(filePath);
         console.log(`[VIDEO_WORKER]     ✅ Found (${stats.size} bytes)`);
-        foundFiles.push({ slide: index + 1, path: audioPath, size: stats.size });
+        foundFiles.push({ slide: index + 1, path: audioPath, filePath, size: stats.size });
       } else {
-        console.error(`[VIDEO_WORKER]     ❌ MISSING`);
-        missingFiles.push({ slide: index + 1, path: audioPath });
+        console.error(`[VIDEO_WORKER]     ❌ MISSING at path: ${filePath}`);
+        missingFiles.push({ slide: index + 1, path: audioPath, filePath });
       }
     });
     
@@ -560,8 +571,8 @@ class VideoWorker {
     
     if (missingFiles.length > 0) {
       console.error(`[VIDEO_WORKER] ❌ MISSING AUDIO FILES:`);
-      missingFiles.forEach(({ slide, path }) => {
-        console.error(`[VIDEO_WORKER]   Slide ${slide}: ${path}`);
+      missingFiles.forEach(({ slide, path, filePath }) => {
+        console.error(`[VIDEO_WORKER]   Slide ${slide}: ${path} -> ${filePath}`);
       });
       
       throw new Error(`Cannot render video: ${missingFiles.length} audio files are missing. Slides: ${missingFiles.map(m => m.slide).join(', ')}`);
