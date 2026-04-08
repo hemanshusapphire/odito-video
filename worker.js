@@ -430,6 +430,7 @@ class VideoWorker {
 
   /**
    * Convert HTTP audio URL to local file path for Remotion compatibility
+   * Tries multiple possible audio storage locations in priority order
    * @param {string} audioUrl - HTTP URL like http://SERVER_IP:5000/audio/file.mp3
    * @returns {string} Local file path like /root/odito/odito-backend/public/audio/file.mp3
    */
@@ -448,23 +449,94 @@ class VideoWorker {
       const url = new URL(audioUrl);
       const filename = path.basename(url.pathname);
       
-      // Construct local file path using BACKEND_PUBLIC_PATH
-      const localPath = path.join(this.backendPublicPath, 'audio', filename);
+      // Define all possible audio storage locations in priority order
+      const possiblePaths = [
+        // 1. Backend public directory (primary location for slide audio)
+        path.join(this.backendPublicPath, 'audio', filename),
+        
+        // 2. Video cache directory (secondary location)
+        path.join(__dirname, 'cache', 'audio', filename),
+        
+        // 3. Video public directory (legacy location)
+        path.join(__dirname, 'public', 'audio', filename),
+        
+        // 4. Current working directory + cache/audio (fallback)
+        path.join(process.cwd(), 'cache', 'audio', filename),
+        
+        // 5. Current working directory + public/audio (fallback)
+        path.join(process.cwd(), 'public', 'audio', filename)
+      ];
       
-      console.log(`[VIDEO_WORKER]   Converted to: ${localPath}`);
+      console.log(`[VIDEO_WORKER] 🔍 Trying ${possiblePaths.length} possible paths:`);
       
-      // Validate file exists
-      if (!fs.existsSync(localPath)) {
-        throw new Error(`Audio file not found at local path: ${localPath}`);
+      // Try each path in order
+      for (let i = 0; i < possiblePaths.length; i++) {
+        const candidatePath = possiblePaths[i];
+        console.log(`[VIDEO_WORKER]   Path ${i + 1}: ${candidatePath}`);
+        
+        if (fs.existsSync(candidatePath)) {
+          const stats = fs.statSync(candidatePath);
+          console.log(`[VIDEO_WORKER]   ✅ FOUND at path ${i + 1} (${stats.size} bytes)`);
+          return candidatePath;
+        } else {
+          console.log(`[VIDEO_WORKER]   ❌ Not found at path ${i + 1}`);
+        }
       }
       
-      console.log(`[VIDEO_WORKER]   ✅ File exists locally`);
-      return localPath;
+      // If we get here, no path worked
+      console.error(`[VIDEO_WORKER] ❌ Audio file not found in ANY location:`);
+      possiblePaths.forEach((p, i) => {
+        console.error(`[VIDEO_WORKER]   ${i + 1}. ${p}`);
+      });
+      
+      throw new Error(`Audio file '${filename}' not found in any of ${possiblePaths.length} locations`);
       
     } catch (error) {
       console.error(`[VIDEO_WORKER] ❌ URL conversion failed:`, error.message);
       throw new Error(`Failed to convert audio URL to local path: ${error.message}`);
     }
+  }
+
+  /**
+   * Validate all audio paths exist before Remotion rendering
+   * @param {Array} slidesWithAudio - Array of slide objects with audio paths
+   * @throws {Error} If any audio file is missing
+   */
+  validateAllAudioPaths(slidesWithAudio) {
+    console.log(`[VIDEO_WORKER] 🔍 Validating all audio paths before rendering...`);
+    
+    const missingFiles = [];
+    const foundFiles = [];
+    
+    slidesWithAudio.forEach((slide, index) => {
+      const audioPath = slide.audio;
+      console.log(`[VIDEO_WORKER]   Slide ${index + 1}: ${audioPath}`);
+      
+      if (fs.existsSync(audioPath)) {
+        const stats = fs.statSync(audioPath);
+        console.log(`[VIDEO_WORKER]     ✅ Found (${stats.size} bytes)`);
+        foundFiles.push({ slide: index + 1, path: audioPath, size: stats.size });
+      } else {
+        console.error(`[VIDEO_WORKER]     ❌ MISSING`);
+        missingFiles.push({ slide: index + 1, path: audioPath });
+      }
+    });
+    
+    console.log(`[VIDEO_WORKER] 📊 Audio validation summary:`);
+    console.log(`[VIDEO_WORKER]   ✅ Found: ${foundFiles.length} files`);
+    console.log(`[VIDEO_WORKER]   ❌ Missing: ${missingFiles.length} files`);
+    
+    if (missingFiles.length > 0) {
+      console.error(`[VIDEO_WORKER] ❌ MISSING AUDIO FILES:`);
+      missingFiles.forEach(({ slide, path }) => {
+        console.error(`[VIDEO_WORKER]   Slide ${slide}: ${path}`);
+      });
+      
+      throw new Error(`Cannot render video: ${missingFiles.length} audio files are missing. Slides: ${missingFiles.map(m => m.slide).join(', ')}`);
+    }
+    
+    console.log(`[VIDEO_WORKER] ✅ All audio files validated successfully`);
+    return foundFiles;
   }
 
   /**
@@ -1510,6 +1582,9 @@ class VideoWorker {
 
   async renderVideoWithSlides(projectId, jobId, slidesWithAudio, auditSnapshot) {
     try {
+      // CRITICAL: Validate all audio paths exist before rendering
+      this.validateAllAudioPaths(slidesWithAudio);
+      
       // Dynamic video output path using environment variable or resolved path
       const videoDir = path.join(this.backendPublicPath, 'videos');
       const videoFileName = `${projectId}-${jobId}.mp4`;
