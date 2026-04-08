@@ -1679,7 +1679,7 @@ class VideoWorker {
       fs.writeFileSync(inputDataPath, JSON.stringify(inputData, null, 2));
       
       // DEBUG LOG: Final temp JSON data
-      console.log("FINAL SLIDES DATA:", JSON.stringify(slidesWithRelativeAudio, null, 2));
+      console.log("FINAL SLIDES DATA:", JSON.stringify(slidesWithAudio, null, 2));
       
       console.log(`[VIDEO_WORKER] 🎬 Starting Remotion render for projectId=${projectId}`);
       console.log(`[VIDEO_WORKER] 📊 Slides with audio: ${slidesWithAudio.length}`);
