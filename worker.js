@@ -1658,10 +1658,21 @@ class VideoWorker {
         console.log(`[VIDEO_WORKER]   Slide ${index + 1} (${slide.type}): ${slide.duration.toFixed(2)}s = ${slide.durationInFrames} frames`);
       });
       
+      // 🔥 CRITICAL FIX: Convert audio URLs to relative paths before sending to Remotion
+      const slidesWithRelativeAudio = slidesWithAudio.map(slide => {
+        return {
+          ...slide,
+          audio: this.convertAudioUrlToLocalPath(slide.audio) // 🔥 THIS LINE FIXES THE ISSUE
+        };
+      });
+      
+      // DEBUG PRINT: Verify final audio path sent to Remotion
+      console.log("FINAL AUDIO PATH SENT TO REMOTION:", slidesWithRelativeAudio[0]?.audio);
+      
       // Prepare input data for Remotion with slides and per-slide audio - CLEAN OUTPUT
       const inputData = {
         projectId: projectId,
-        slidesWithAudio: slidesWithAudio,
+        slidesWithAudio: slidesWithRelativeAudio, // 🔥 USE FIXED SLIDES
         fps: 30, // Frame rate for duration calculation
         durationInFrames: totalDurationInFrames, // Dynamic total duration
         totalDuration: totalDuration // Pass total duration in seconds for reference
@@ -1674,7 +1685,7 @@ class VideoWorker {
       fs.writeFileSync(inputDataPath, JSON.stringify(inputData, null, 2));
       
       // DEBUG LOG: Final temp JSON data
-      console.log("FINAL SLIDES DATA:", JSON.stringify(slidesWithAudio, null, 2));
+      console.log("FINAL SLIDES DATA:", JSON.stringify(slidesWithRelativeAudio, null, 2));
       
       console.log(`[VIDEO_WORKER] 🎬 Starting Remotion render for projectId=${projectId}`);
       console.log(`[VIDEO_WORKER] 📊 Slides with audio: ${slidesWithAudio.length}`);
