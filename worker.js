@@ -1597,9 +1597,10 @@ class VideoWorker {
       
       // Calculate total video duration based on slide audio durations
       const totalDuration = slidesWithAudio.reduce((sum, slide) => sum + slide.duration, 0);
-      const totalDurationInFrames = Math.round(totalDuration * 30); // Convert to frames at 30 FPS
+      const fps = 24; // 🚀 PERFORMANCE: Reduced from 30 to 24 FPS for 20% faster rendering
+      const totalDurationInFrames = Math.round(totalDuration * fps);
       console.log(`[VIDEO_WORKER] 🕐 Total video duration: ${totalDuration.toFixed(2)} seconds`);
-      console.log(`[VIDEO_WORKER] 🎞️ Total duration frames: ${totalDurationInFrames} frames`);
+      console.log(`[VIDEO_WORKER] 🎞️ Total duration frames: ${totalDurationInFrames} frames at ${fps} FPS`);
       
       // CRITICAL FIX: Log individual slide durations for debugging sync issues
       console.log(`[VIDEO_WORKER] 📊 Slide-by-slide duration breakdown:`);
@@ -1610,31 +1611,35 @@ class VideoWorker {
       // 🔥 CRITICAL FIX: Use absolute file paths - no HTTP 404 errors
       // DEBUG PRINT: Verify final audio path sent to Remotion
       console.log("FINAL AUDIO PATH SENT TO REMOTION:", slidesWithAudio[0]?.audio);
-      
+
       // Prepare input data for Remotion with slides and per-slide audio - CLEAN OUTPUT
       const inputData = {
         projectId: projectId,
         slidesWithAudio: slidesWithAudio, // 🔥 USE RELATIVE PATHS FOR staticFile()
-        fps: 30, // Frame rate for duration calculation
+        fps: fps, // 🚀 PERFORMANCE: 24 FPS for faster rendering
         durationInFrames: totalDurationInFrames, // Dynamic total duration
         totalDuration: totalDuration // Pass total duration in seconds for reference
       };
-      
+
       const inputDataPath = path.join(__dirname, 'temp', `${projectId}-input.json`);
       if (!fs.existsSync(path.dirname(inputDataPath))) {
         fs.mkdirSync(path.dirname(inputDataPath), { recursive: true });
       }
       fs.writeFileSync(inputDataPath, JSON.stringify(inputData, null, 2));
-      
+
       // DEBUG LOG: Final temp JSON data
       console.log("FINAL SLIDES DATA:", JSON.stringify(slidesWithAudio, null, 2));
-      
+
       console.log(`[VIDEO_WORKER] 🎬 Starting Remotion render for projectId=${projectId}`);
       console.log(`[VIDEO_WORKER] 📊 Slides with audio: ${slidesWithAudio.length}`);
       console.log(`[VIDEO_WORKER] 🕐 Total duration: ${totalDuration.toFixed(2)} seconds`);
       console.log(`[VIDEO_WORKER] 🎞️ Total frames: ${totalDurationInFrames} frames (dynamic)`);
       console.log(`[VIDEO_WORKER] 📹 Video output: ${videoPath}`);
-      
+
+      // 🚀 PERFORMANCE: Track render start time
+      const renderStartTime = Date.now();
+      console.log(`[VIDEO_WORKER] ⏱️ Render start time: ${new Date(renderStartTime).toISOString()}`);
+
       return new Promise((resolve, reject) => {
         // Use local remotion binary
         const remotionPath = path.join(
@@ -1643,14 +1648,14 @@ class VideoWorker {
           '.bin',
           process.platform === 'win32' ? 'remotion.cmd' : 'remotion'
         );
-        
+
         // Safety check: ensure binary exists
         if (!fs.existsSync(remotionPath)) {
           reject(new Error(`Remotion binary not found at ${remotionPath}. Run npm install.`));
           return;
         }
-        
-        // Arguments for remotion
+
+        // Arguments for remotion with performance optimizations
         const remotionArgs = [
           'render',
           'src/index.ts',
@@ -1660,7 +1665,10 @@ class VideoWorker {
           `--duration=${totalDurationInFrames}`, // Dynamic duration override
           '--codec', 'h264',
           '--pixel-format', 'yuv420p',
-          '--public-dir=.' // 🔥 CRITICAL: Set public dir for staticFile() resolution
+          '--public-dir=public', // 🔥 CRITICAL: Set public dir to video/public for staticFile() resolution
+          '--concurrency=4', // 🚀 PERFORMANCE: Use 4 concurrent rendering threads
+          '--log=verbose', // 🚀 PERFORMANCE: Enable verbose logging for performance tracking
+          '--overwrite' // 🚀 PERFORMANCE: Overwrite existing output without prompt
         ];
         
         console.log(`[VIDEO_WORKER] Using remotion binary: ${remotionPath}`);
@@ -1685,7 +1693,11 @@ class VideoWorker {
         });
         
         remotion.on('close', (code) => {
+          const renderEndTime = Date.now();
+          const renderDuration = (renderEndTime - renderStartTime) / 1000; // Convert to seconds
           console.log(`[VIDEO_WORKER] Remotion process exited with code ${code}`);
+          console.log(`[VIDEO_WORKER] ⏱️ Render end time: ${new Date(renderEndTime).toISOString()}`);
+          console.log(`[VIDEO_WORKER] ⏱️ Total render duration: ${renderDuration.toFixed(2)} seconds (${(renderDuration / 60).toFixed(2)} minutes)`);
           
           if (code === 0 && fs.existsSync(videoPath)) {
             console.log(`[VIDEO_WORKER] ✅ Video rendered successfully: ${videoPath}`);
@@ -1868,7 +1880,11 @@ class VideoWorker {
         });
         
         remotion.on('close', (code) => {
+          const renderEndTime = Date.now();
+          const renderDuration = (renderEndTime - renderStartTime) / 1000; // Convert to seconds
           console.log(`[VIDEO_WORKER] Remotion process exited with code ${code}`);
+          console.log(`[VIDEO_WORKER] ⏱️ Render end time: ${new Date(renderEndTime).toISOString()}`);
+          console.log(`[VIDEO_WORKER] ⏱️ Total render duration: ${renderDuration.toFixed(2)} seconds (${(renderDuration / 60).toFixed(2)} minutes)`);
           
           if (code === 0 && fs.existsSync(videoPath)) {
             console.log(`[VIDEO_WORKER] ✅ Video rendered successfully: ${videoPath}`);

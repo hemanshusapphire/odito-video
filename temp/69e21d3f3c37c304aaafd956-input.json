@@ -1,0 +1,489 @@
+{
+  "projectId": "69e21d3f3c37c304aaafd956",
+  "slidesWithAudio": [
+    {
+      "id": 1,
+      "type": "projectOverview",
+      "title": "Zpodsforsleep-Com",
+      "subtitle": "https://www.zpodsforsleep.com/",
+      "narration": "Zpodsforsleep-Com scores 41 out of 100 — not because the business isn't good, but because the website isn't communicating that to search engines. Let's break down exactly why.",
+      "data": {
+        "projectName": "Zpodsforsleep-Com",
+        "url": "https://www.zpodsforsleep.com/",
+        "pagesCrawled": 25,
+        "scores": {
+          "overall": 41,
+          "performance": 17,
+          "seo": 64,
+          "aiVisibility": 32,
+          "technicalHealth": 50
+        },
+        "issueDistribution": {
+          "high": 170,
+          "medium": 147,
+          "low": 0,
+          "total": 317
+        }
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-1.mp3",
+      "duration": 10.3561,
+      "durationInFrames": 311
+    },
+    {
+      "id": 2,
+      "type": "scoreSummary",
+      "title": "Overall Score Analysis",
+      "subtitle": "Score: 41/100",
+      "narration": "Your overall score is 41 out of 100. Technical at 50 and SEO at 64 show moderate performance. Performance at 17 and AI Visibility at 32 are underperforming and need immediate attention. These gaps are severely limiting your growth and require urgent action.",
+      "data": {
+        "scores": {
+          "overall": 41,
+          "performance": 17,
+          "seo": 64,
+          "aiVisibility": 32,
+          "technicalHealth": 50
+        },
+        "overall": 41
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-2.mp3",
+      "duration": 16.671927,
+      "durationInFrames": 500
+    },
+    {
+      "id": 3,
+      "type": "issueDistribution",
+      "title": "Issue Distribution",
+      "subtitle": "317 Total Issues",
+      "narration": "317 issues found — and 170 of them are high priority. That means 54% of your problems are actively costing you rankings right now, today.",
+      "data": {
+        "issueDistribution": {
+          "high": 170,
+          "medium": 147,
+          "low": 0,
+          "total": 317
+        },
+        "total": 317
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-3.mp3",
+      "duration": 9.241542,
+      "durationInFrames": 277
+    },
+    {
+      "id": 4,
+      "type": "highIssues",
+      "title": "High Priority Issues",
+      "subtitle": "Showing top 3 of 170 high-priority issues",
+      "narration": "These high priority issues are the ones bleeding your score the most. Every one of them fixed is a direct point gain — address them first and your overall score could jump significantly within 30 days.",
+      "data": {
+        "issues": [
+          {
+            "issue": "Organization schema incomplete - missing recommended fields: address",
+            "severity": "high",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Add sameAs array with social media URLs and address information for comprehensive entity representation."
+          },
+          {
+            "issue": "Schema markup detected but not in JSON-LD format - crawlers may ignore it",
+            "severity": "high",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Convert schema markup to JSON-LD format. JSON-LD is the preferred format for Google and provides better crawler support and easier maintenance."
+          },
+          {
+            "issue": "Article schema validation failed: No Article schema found, No article schema to validate completeness, Publication dates not visible in page content",
+            "severity": "high",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Address within 7 days - high priority for SEO improvement"
+          }
+        ],
+        "count": 3,
+        "totalHigh": 170,
+        "hasZeroIssues": false
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-4.mp3",
+      "duration": 11.284898,
+      "durationInFrames": 339
+    },
+    {
+      "id": 5,
+      "type": "mediumIssues",
+      "title": "Medium Priority Issues",
+      "subtitle": "Showing top 3 of 147 issues",
+      "narration": "Your medium priority issues aren't urgent, but they're adding up quietly. Resolve these and you're not just fixing problems — you're sending search engines a signal that this site is actively maintained and trustworthy.",
+      "data": {
+        "issues": [
+          {
+            "issue": "No keyword density detected - insufficient content analysis",
+            "severity": "medium",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Add substantial content with clear keyword focus. Ensure primary keywords appear naturally in headings, body text, and important HTML elements."
+          },
+          {
+            "issue": "Page missing visible date information (schema dates present but not visible)",
+            "severity": "medium",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Add visible publication or last-updated date in page content. Use formats like 'Last updated: Month DD, YYYY' or 'Published: Month DD, YYYY' near the title or at the bottom of the content."
+          },
+          {
+            "issue": "Missing BreadcrumbList schema markup",
+            "severity": "medium",
+            "pages": 25,
+            "count": 25,
+            "recommendation": "Add BreadcrumbList schema markup that matches your visible breadcrumb navigation. Include proper ListItem structure with name and item fields."
+          }
+        ],
+        "count": 3,
+        "totalMedium": 147,
+        "hasZeroIssues": false
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-5.mp3",
+      "duration": 11.331338,
+      "durationInFrames": 340
+    },
+    {
+      "id": 6,
+      "type": "lowIssues",
+      "title": "Low Priority Issues",
+      "subtitle": "No issues detected 🎉",
+      "narration": "The good news is, there are no low-priority issues detected. This means your site is already clean at the foundational level, allowing you to focus on higher-impact improvements.",
+      "data": {
+        "issues": [],
+        "count": 0,
+        "totalLow": 0,
+        "hasZeroIssues": true
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-6.mp3",
+      "duration": 9.659501,
+      "durationInFrames": 290
+    },
+    {
+      "id": 7,
+      "type": "technicalHighlights",
+      "title": "Technical Highlights",
+      "subtitle": "Technical SEO Overview",
+      "narration": "50 is decent — but all 25 pages are missing security headers, which search engines flag as unsafe. Plus inconsistent H1 tags mean search engines can't identify what your pages are actually about.",
+      "data": {
+        "auditSnapshot": {
+          "technicalHighlights": {
+            "checks": [
+              {
+                "name": "SSL Certificate",
+                "status": "PASS",
+                "detail": "SSL certificate is valid and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "25 pages missing critical security headers",
+                "affected_pages": 25
+              },
+              {
+                "name": "Canonical Tags",
+                "status": "PASS",
+                "detail": "Canonical tags properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Robots.txt",
+                "status": "FAIL",
+                "detail": "Robots.txt file not found",
+                "affected_pages": 0
+              },
+              {
+                "name": "Noindex on Key Pages",
+                "status": "PASS",
+                "detail": "All important pages are indexable",
+                "affected_pages": 0
+              },
+              {
+                "name": "H1 Tags",
+                "status": "FAIL",
+                "detail": "0 pages missing H1, 16 with multiple H1s",
+                "affected_pages": 16
+              },
+              {
+                "name": "Structured Data / Schema",
+                "status": "PASS",
+                "detail": "25 pages with valid structured data",
+                "affected_pages": 0
+              },
+              {
+                "name": "Mobile Friendliness",
+                "status": "PASS",
+                "detail": "Mobile-friendly configuration detected",
+                "affected_pages": 0
+              },
+              {
+                "name": "XML Sitemap",
+                "status": "FAIL",
+                "detail": "XML sitemap not found",
+                "affected_pages": 0
+              },
+              {
+                "name": "OG / Social Tags",
+                "status": "FAIL",
+                "detail": "25 pages missing Open Graph tags",
+                "affected_pages": 25
+              }
+            ],
+            "criticalIssues": [
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "25 pages missing critical security headers",
+                "affected_pages": 25
+              },
+              {
+                "name": "Robots.txt",
+                "status": "FAIL",
+                "detail": "Robots.txt file not found",
+                "affected_pages": 0
+              },
+              {
+                "name": "H1 Tags",
+                "status": "FAIL",
+                "detail": "0 pages missing H1, 16 with multiple H1s",
+                "affected_pages": 16
+              }
+            ],
+            "topRecommendations": [
+              {
+                "name": "SSL Certificate",
+                "status": "PASS",
+                "detail": "SSL certificate is valid and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "25 pages missing critical security headers",
+                "affected_pages": 25
+              },
+              {
+                "name": "Canonical Tags",
+                "status": "PASS",
+                "detail": "Canonical tags properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Robots.txt",
+                "status": "FAIL",
+                "detail": "Robots.txt file not found",
+                "affected_pages": 0
+              },
+              {
+                "name": "Noindex on Key Pages",
+                "status": "PASS",
+                "detail": "All important pages are indexable",
+                "affected_pages": 0
+              }
+            ]
+          },
+          "scores": {
+            "overall": 41,
+            "performance": 17,
+            "seo": 64,
+            "aiVisibility": 32,
+            "technicalHealth": 50
+          },
+          "issueDistribution": {
+            "high": 170,
+            "medium": 147,
+            "low": 0,
+            "total": 317
+          }
+        }
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-7.mp3",
+      "duration": 12.538776,
+      "durationInFrames": 376
+    },
+    {
+      "id": 8,
+      "type": "performanceSummary",
+      "title": "Performance Summary",
+      "subtitle": "Performance Score: 17",
+      "narration": "Your performance score is 17. Mobile performance is lagging at 8 compared to desktop at 38. This indicates serious performance bottlenecks affecting load speed and user experience. Focus on optimizing heavy assets, enabling compression, and improving load efficiency for quick gains.",
+      "data": {
+        "pageSpeed": 17,
+        "mobileScore": 8,
+        "desktopScore": 38
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-8.mp3",
+      "duration": 20.2478,
+      "durationInFrames": 607
+    },
+    {
+      "id": 9,
+      "type": "coreWebVitals",
+      "title": "Core Web Vitals",
+      "subtitle": "User Experience Metrics",
+      "narration": "Your main content takes 6.6 s seconds to appear on mobile — search engine guidelines recommend 2.5. That gap is where your visitors lose patience and leave. Desktop is better, but still problematic.",
+      "data": {
+        "mobile": {
+          "lcp": "6.6 s",
+          "tbt": "4,520 ms",
+          "fcp": "4.1 s",
+          "cls": "0.706",
+          "score": 8
+        },
+        "desktop": {
+          "lcp": "1.3 s",
+          "tbt": "1,800 ms",
+          "fcp": "1.0 s",
+          "cls": "0.623",
+          "score": 38
+        }
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-9.mp3",
+      "duration": 12.120816,
+      "durationInFrames": 364
+    },
+    {
+      "id": 10,
+      "type": "keywords",
+      "title": "Keyword Performance",
+      "subtitle": "1 Keywords Tracked",
+      "narration": "Currently, none of your 1 tracked keywords are ranking in the top 100 search results. This represents a significant opportunity, as each keyword optimized properly could unlock new streams of organic traffic and potential customers for your business.",
+      "data": {
+        "totalKeywords": 1,
+        "topRankings": [],
+        "opportunities": [],
+        "notRanking": [
+          {
+            "keyword": "best sleeping pods in new yorl",
+            "rank": null,
+            "status": "not_ranking"
+          }
+        ]
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-10.mp3",
+      "duration": 14.257052,
+      "durationInFrames": 428
+    },
+    {
+      "id": 10,
+      "type": "aiAnalysis",
+      "title": "AI Analysis Overview",
+      "subtitle": "AI Search Readiness Summary",
+      "narration": "And now the most important score in today's world — AI Visibility. ChatGPT, Claude, Perplexity, AI search overviews — these are the new search engines. People aren't just searching online anymore, they're asking AI. And AI decides who to mention, who to recommend, who to trust. Your score is 32 — meaning right now, you're largely invisible in that conversation. This is the score that will define the next 5 years of your online presence.",
+      "data": {
+        "score": 32,
+        "summary": "Moderate AI visibility. Your brand has limited presence in AI-generated search results.",
+        "hasKnowledgeGraph": true
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-11.mp3",
+      "duration": 25.68127,
+      "durationInFrames": 770
+    },
+    {
+      "id": 11,
+      "type": "aiCategoryBreakdown",
+      "title": "AI Category Breakdown",
+      "subtitle": "AI Performance Distribution",
+      "narration": "Your AI performance shows a mixed distribution across key areas. AI Impact at 80 is performing strongly. Citation Probability at 10 and LLM Readiness at 32 and AEO Score at 25 and Topical Authority at 27 and Voice Intent at 25 are underperforming and need attention. This indicates low AI readiness requiring comprehensive optimization.",
+      "data": {
+        "categories": {
+          "aiImpact": 80,
+          "citationProbability": 10,
+          "llmReadiness": 32,
+          "aeoScore": 25,
+          "topicalAuthority": 27,
+          "voiceIntent": 25
+        }
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-12.mp3",
+      "duration": 24.613152,
+      "durationInFrames": 738
+    },
+    {
+      "id": 12,
+      "type": "aiDetailedMetrics",
+      "title": "AI Detailed Metrics",
+      "subtitle": "Technical AI Readiness",
+      "narration": "Your technical AI readiness shows varied performance across key metrics. Schema Coverage at 64 shows moderate performance. FAQ Optimization at 25 and Conversational Score at 25 and AI Snippet Probability at 45 and AI Citation Rate at 14 and Knowledge Graph at 48 need improvement. This indicates low AI visibility requiring comprehensive optimization.",
+      "data": {
+        "detailedMetrics": {
+          "schemaCoverage": 64,
+          "faqOptimization": 25,
+          "conversationalScore": 25,
+          "aiSnippetProbability": 45,
+          "aiCitationRate": 14,
+          "knowledgeGraph": 48
+        }
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-13.mp3",
+      "duration": 25.40263,
+      "durationInFrames": 762
+    },
+    {
+      "id": 13,
+      "type": "aiTopIssues",
+      "title": "AI Top Issues",
+      "subtitle": "Critical AI Optimization Areas",
+      "narration": "The root cause is clear — AI systems do not understand your entity properly. They don't know who you are, what you do, or who you serve. Fixing your entity clarity can significantly improve your AI visibility score.",
+      "data": {
+        "topIssues": [
+          {
+            "title": "Llms Txt File Exists",
+            "score": 0,
+            "status": "info",
+            "category": "general",
+            "recommendation": "Address ai_impact issue affecting 25 pages"
+          },
+          {
+            "title": "Clear Entity First 150 Words",
+            "score": 0,
+            "status": "info",
+            "category": "general",
+            "recommendation": "Address llm_readiness issue affecting 25 pages"
+          },
+          {
+            "title": "Step By Step Content",
+            "score": 20,
+            "status": "info",
+            "category": "general",
+            "recommendation": "Address voice_intent issue affecting 25 pages"
+          }
+        ]
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-14.mp3",
+      "duration": 13.142494,
+      "durationInFrames": 394
+    },
+    {
+      "id": 15,
+      "type": "ctaClosure",
+      "title": "What's Next?",
+      "subtitle": "Take Action on Your SEO & AI Growth",
+      "narration": "Now you have two clear paths. You can use the AI-powered suggestions provided in this audit and implement them yourself. Or, if you'd prefer faster and expert-driven results, our team can handle everything for you. Let's take your SEO and AI visibility to the next level.",
+      "data": {
+        "cards": [
+          {
+            "title": "Use AI Suggestions",
+            "description": "Follow the AI recommendations provided in this audit to improve your SEO step by step."
+          },
+          {
+            "title": "Do It Yourself",
+            "description": "Apply the fixes on your own using the insights and improve your rankings gradually."
+          },
+          {
+            "title": "Let Us Handle It",
+            "description": "Our team can implement everything for you. Get in touch and scale your SEO faster."
+          }
+        ]
+      },
+      "audio": "cache/audio/69e21d3f3c37c304aaafd956-slide-15.mp3",
+      "duration": 15.27873,
+      "durationInFrames": 458
+    }
+  ],
+  "fps": 24,
+  "durationInFrames": 5564,
+  "totalDuration": 231.82802600000002
+}

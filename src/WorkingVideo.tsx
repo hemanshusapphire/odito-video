@@ -1,4 +1,5 @@
 import { AbsoluteFill, Sequence, interpolate, useCurrentFrame, Audio, staticFile } from "remotion";
+import { useMemo } from "react";
 import { theme } from "./theme";
 
 // Import all 15 required slides (matching worker output)
@@ -46,26 +47,28 @@ export const AuditVideo = (props: Record<string, unknown>) => {
   }
   
   console.log(`✅ REMOTION: All ${slidesWithAudio.length} slides with audio validated successfully`);
-  
-  // Calculate timing based on actual audio durations
-  let currentFrame = 0;
-  const slideTiming = slidesWithAudio.map((slide: any, index: number) => {
-    const durationInFrames = Math.round(slide.duration * fps);
-    const timing = {
-      slideNumber: index + 1,
-      from: currentFrame,
-      dur: durationInFrames,
-      to: currentFrame + durationInFrames,
-      slide: slide
-    };
-    
-    console.log(`🎬 REMOTION: Slide ${index + 1} (${slide.title}): ${currentFrame} - ${timing.to} (${durationInFrames} frames, ${slide.duration.toFixed(2)}s)`);
-    
-    currentFrame += durationInFrames;
-    return timing;
-  });
-  
-  const totalDuration = currentFrame;
+
+  // 🚀 PERFORMANCE: Memoize slide timing calculation to prevent recalculation on every frame
+  const slideTiming = useMemo(() => {
+    let currentFrame = 0;
+    return slidesWithAudio.map((slide: any, index: number) => {
+      const durationInFrames = Math.round(slide.duration * fps);
+      const timing = {
+        slideNumber: index + 1,
+        from: currentFrame,
+        dur: durationInFrames,
+        to: currentFrame + durationInFrames,
+        slide: slide
+      };
+
+      console.log(`🎬 REMOTION: Slide ${index + 1} (${slide.title}): ${currentFrame} - ${timing.to} (${durationInFrames} frames, ${slide.duration.toFixed(2)}s)`);
+
+      currentFrame += durationInFrames;
+      return timing;
+    });
+  }, [slidesWithAudio, fps]);
+
+  const totalDuration = slideTiming[slideTiming.length - 1]?.to || 0;
   const totalSeconds = totalDuration / fps;
   
   console.log(`🕐 REMOTION: Total video duration: ${totalDuration} frames (${totalSeconds.toFixed(2)} seconds)`);
