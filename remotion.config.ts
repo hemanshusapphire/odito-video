@@ -8,6 +8,8 @@ import { enableTailwind } from '@remotion/tailwind-v4';
 
 Config.setVideoImageFormat("jpeg");
 Config.setOverwriteOutput(true);
+Config.setConcurrency(4);
+Config.setPublicDir("./public");
 Config.overrideWebpackConfig(enableTailwind);
 
 // Add custom webpack configuration for audio files

@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
 const crypto = require('crypto');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const { getMediaUrls } = require('../config/env.js');
 
 /**
@@ -674,12 +674,16 @@ class AudioService {
         console.log(`[AUDIO_SERVICE] Deleted existing corrupted audio: ${outputPath}`);
       }
       
-      // FIXED: Generate valid silent MP3 using FFmpeg (44 seconds of silence for 11 slides)
-      const durationSeconds = 44; // 11 slides × 4 seconds each
-      const ffmpegCommand = `ffmpeg -f lavfi -i anullsrc=r=44100:cl=stereo -t ${durationSeconds} -q:a 9 -acodec libmp3lame "${outputPath}" -y`;
-      console.log(`[AUDIO_SERVICE] Running FFmpeg for ${durationSeconds} seconds: ${ffmpegCommand}`);
-      
-      execSync(ffmpegCommand, { stdio: 'inherit' });
+      const durationSeconds = 44;
+      const ffmpegPath = this.getFfprobePath().replace(/ffprobe(\.exe)?$/, (_, ext) => `ffmpeg${ext || ''}`);
+      console.log(`[AUDIO_SERVICE] Running FFmpeg for ${durationSeconds} seconds via: ${ffmpegPath}`);
+
+      execFileSync(ffmpegPath, [
+        '-f', 'lavfi', '-i', 'anullsrc=r=44100:cl=stereo',
+        '-t', String(durationSeconds),
+        '-q:a', '9', '-acodec', 'libmp3lame',
+        outputPath, '-y'
+      ], { stdio: 'inherit' });
       
       // Validate the generated file
       if (!fs.existsSync(outputPath)) {
@@ -831,36 +835,62 @@ class AudioService {
   }
 
   /**
+   * Resolve the bundled ffprobe binary from @remotion/compositor-* packages.
+   * Falls back to the system 'ffprobe' name if no bundled binary is found.
+   * @returns {string} Absolute path to ffprobe binary (or 'ffprobe' for PATH lookup)
+   */
+  getFfprobePath() {
+    const VIDEO_ROOT = path.resolve(__dirname, '..');
+    const platformMap = {
+      'win32-x64':   ['compositor-win32-x64-msvc',  'ffprobe.exe'],
+      'darwin-x64':  ['compositor-darwin-x64',       'ffprobe'],
+      'darwin-arm64':['compositor-darwin-arm64',      'ffprobe'],
+      'linux-x64':   ['compositor-linux-x64-gnu',    'ffprobe'],
+      'linux-arm64': ['compositor-linux-arm64-gnu',  'ffprobe'],
+    };
+    const key = `${process.platform}-${process.arch}`;
+    const entry = platformMap[key];
+    if (entry) {
+      const candidate = path.join(VIDEO_ROOT, 'node_modules', '@remotion', entry[0], entry[1]);
+      if (fs.existsSync(candidate)) return candidate;
+    }
+    return 'ffprobe';
+  }
+
+  /**
    * Get audio duration using ffprobe
    * @param {string} audioPath - Path to audio file
    * @returns {Promise<number>} Duration in seconds
    */
   async getAudioDuration(audioPath) {
     try {
-      // Convert web path to local file path
       const filename = path.basename(audioPath);
       const localPath = path.join(this.OUTPUT_DIR, filename);
-      
+
       if (!fs.existsSync(localPath)) {
         throw new Error(`Audio file not found: ${localPath}`);
       }
-      
-      // Use ffprobe to get duration
-      const command = `ffprobe -v quiet -show_entries format=duration -of csv=p=0 "${localPath}"`;
-      const output = execSync(command, { encoding: 'utf8' }).trim();
-      
+
+      // Use execFileSync (no shell) with the bundled ffprobe binary so that
+      // paths containing spaces are passed as array arguments and never
+      // concatenated into a shell command string.
+      const ffprobePath = this.getFfprobePath();
+      const output = execFileSync(
+        ffprobePath,
+        ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', localPath],
+        { encoding: 'utf8' }
+      ).trim();
+
       const duration = parseFloat(output);
       if (isNaN(duration) || duration <= 0) {
         throw new Error(`Invalid duration: ${output}`);
       }
-      
+
       console.log(`[AUDIO_SERVICE] 🎵 Audio duration for ${filename}: ${duration.toFixed(2)} seconds`);
       return duration;
-      
+
     } catch (error) {
       console.error(`[AUDIO_SERVICE] ❌ Failed to get audio duration for ${audioPath}:`, error.message);
-      // CRITICAL FIX: Calculate fallback duration based on text length instead of hardcoded 4 seconds
-      // Average speaking rate: 150 words per minute = 2.5 words per second
       const fallbackDuration = Math.max(2.0, this.estimateDurationFromText(audioPath));
       console.log(`[AUDIO_SERVICE] ⚠️ Using estimated duration: ${fallbackDuration.toFixed(2)} seconds`);
       return fallbackDuration;

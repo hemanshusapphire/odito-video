@@ -1,18 +1,21 @@
 import { Composition } from "remotion";
 import { AuditVideo as WorkingVideo } from "./WorkingVideo";
+import { HomepageAuditVideo } from "./homepage-audit/HomepageAuditVideo";
 // import { TOTAL_DURATION_FRAMES } from "./utils/timingUtils"; // DEPRECATED - Use dynamic duration
 import { loadFont as loadSyne } from "@remotion/google-fonts/Syne";
 import { loadFont as loadJetBrains } from "@remotion/google-fonts/JetBrainsMono";
+import { loadFont as loadInter } from "@remotion/google-fonts/Inter";
 import React from "react";
 
-// 🚀 PERFORMANCE: Load fonts with warning suppression to avoid 48-request overhead
+// Load fonts for all compositions
 const loadFonts = async () => {
   try {
     await Promise.all([
       loadSyne(),
-      loadJetBrains({ ignoreTooManyRequestsWarning: true } as any)
+      loadJetBrains({ ignoreTooManyRequestsWarning: true } as any),
+      loadInter(),
     ]);
-    console.log('✅ Fonts loaded successfully (optimized with warning suppression)');
+    console.log('✅ Fonts loaded successfully');
   } catch (error) {
     console.warn('⚠️ Font loading failed:', error);
   }
@@ -37,6 +40,21 @@ export const RemotionRoot: React.FC = () => {
           slidesWithAudio: [],      // ✅ FIXED: Correct key matching worker
           durationInFrames: 1478,   // Dynamic duration from worker
           totalDuration: 61.6       // Dynamic total duration in seconds from worker
+        }}
+      />
+
+      {/* Homepage Audit Video — 10-scene pipeline, ~80s at 30fps = 2400 frames.
+          Duration is overridden dynamically by the worker via calculateMetadata. */}
+      <Composition
+        id="HomepageAuditVideo"
+        component={HomepageAuditVideo}
+        durationInFrames={2460}
+        fps={24}
+        width={1920}
+        height={1080}
+        defaultProps={{
+          slidesWithAudio: [],
+          fps: 24,
         }}
       />
     </>

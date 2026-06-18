@@ -1,0 +1,134 @@
+{
+  "projectId": "6a2126ab705acb46ed255d90",
+  "slidesWithAudio": [
+    {
+      "id": 1,
+      "type": "homepageIntro",
+      "title": "Nullplex Software Pvt Ltd - Best software development company in India",
+      "subtitle": "https://www.nullplex.com",
+      "narration": "Welcome to your Odito AI audit report for https://www.nullplex.com. Here is a complete snapshot of your website's current performance, captured at the time of your homepage audit.",
+      "data": {
+        "url": "https://www.nullplex.com",
+        "projectName": "Nullplex Software Pvt Ltd - Best software development company in India",
+        "audited_at": null
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-1.mp3",
+      "duration": 8.672653,
+      "durationInFrames": 260
+    },
+    {
+      "id": 2,
+      "type": "homepageOverallScore",
+      "title": "Overall Score",
+      "subtitle": "50 / 100",
+      "narration": "Your website scored 50 out of 100. Average performance — strategic improvements will make a significant difference.",
+      "data": {
+        "score": 50
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-2.mp3",
+      "duration": 6.687347,
+      "durationInFrames": 201
+    },
+    {
+      "id": 3,
+      "type": "homepageCategoryScores",
+      "title": "Category Scores",
+      "subtitle": "Performance by Area",
+      "narration": "Breaking down by category: AI Visibility scored 45. Technical Health scored 67. Performance scored 65. Accessibility scored 56.",
+      "data": {
+        "aiVisibility": 45,
+        "technicalHealth": 67,
+        "performance": 65,
+        "accessibility": 56,
+        "seo": 45
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-3.mp3",
+      "duration": 9.221224,
+      "durationInFrames": 277
+    },
+    {
+      "id": 4,
+      "type": "homepageTopIssues",
+      "title": "Top Issues",
+      "subtitle": "10 Critical · 10 Warnings",
+      "narration": "We identified 10 critical issues and 10 warnings. The highest priority items are: Hreflang tags are missing for international SEO, and Noindex tag detected - page won't be indexed.",
+      "data": {
+        "issueDistribution": {
+          "total": 40,
+          "critical": 10,
+          "warnings": 10,
+          "passed": 20
+        },
+        "topIssues": {
+          "critical": [
+            "Hreflang tags are missing for international SEO",
+            "Noindex tag detected - page won't be indexed",
+            "llms.txt file is missing - AI search engines can't discover your content",
+            "Limited structured data - AI understanding is restricted",
+            "FAQ is not optimized for AI search engines"
+          ],
+          "warnings": []
+        }
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-4.mp3",
+      "duration": 11.128163,
+      "durationInFrames": 334
+    },
+    {
+      "id": 5,
+      "type": "homepageAISummary",
+      "title": "AI Visibility",
+      "subtitle": "Score: 45",
+      "narration": "Your AI visibility score of 45 indicates limited presence in AI-powered search. Improving this score is critical for the next era of search visibility. The most important improvement opportunity is: llms.txt.",
+      "data": {
+        "aiScore": 45,
+        "aiChecks": [
+          {
+            "name": "llms.txt",
+            "rule_id": "llms_txt_missing",
+            "status": "fail",
+            "severity": "high",
+            "message": "llms.txt file is missing - AI search engines can't discover your content",
+            "category": "ai"
+          },
+          {
+            "name": "Structured Data Depth",
+            "rule_id": "structured_data_limited",
+            "status": "fail",
+            "severity": "high",
+            "message": "Limited structured data - AI understanding is restricted",
+            "category": "ai"
+          },
+          {
+            "name": "FAQ Optimization",
+            "rule_id": "faq_not_optimized",
+            "status": "fail",
+            "severity": "high",
+            "message": "FAQ is not optimized for AI search engines",
+            "category": "ai"
+          }
+        ]
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-5.mp3",
+      "duration": 13.270204,
+      "durationInFrames": 398
+    },
+    {
+      "id": 6,
+      "type": "homepageCTA",
+      "title": "Run Full Audit",
+      "subtitle": "Unlock Detailed Recommendations",
+      "narration": "This was a homepage-only snapshot. Run a full audit to unlock detailed recommendations for all pages of your website, and turn this 50-point foundation into a high-performing digital presence.",
+      "data": {
+        "overallScore": 50,
+        "url": "https://www.nullplex.com"
+      },
+      "audio": "cache/audio/6a2126ab705acb46ed255d90-slide-6.mp3",
+      "duration": 11.937959,
+      "durationInFrames": 358
+    }
+  ],
+  "fps": 24,
+  "durationInFrames": 1462,
+  "totalDuration": 60.91755
+}

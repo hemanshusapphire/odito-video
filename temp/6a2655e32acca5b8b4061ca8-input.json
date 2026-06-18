@@ -1,0 +1,233 @@
+{
+  "projectId": "6a2655e32acca5b8b4061ca8",
+  "slidesWithAudio": [
+    {
+      "id": 1,
+      "type": "homepageIntro",
+      "title": "Digital Marketing Agency - Sapphire Digital Agency",
+      "subtitle": "https://www.sapphiredigitalagency.com",
+      "narration": "We've completed your OditoAI website audit. Your website received an overall score of 65 out of 100. During our analysis, we identified 40 issues, including 11 critical issues and 5 warnings. These issues may be affecting your search visibility, website performance, AI discoverability, and user experience. Let's review the most important findings.",
+      "data": {
+        "url": "https://www.sapphiredigitalagency.com",
+        "projectName": "Digital Marketing Agency - Sapphire Digital Agency",
+        "audited_at": null,
+        "overallScore": 65,
+        "totalIssues": 40,
+        "criticalIssues": 11,
+        "warningIssues": 5
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-1.mp3",
+      "duration": 21.394286,
+      "durationInFrames": 642
+    },
+    {
+      "id": 2,
+      "type": "homepageOnPage",
+      "title": "On-Page SEO",
+      "subtitle": "Score: 82",
+      "narration": "Your On-Page SEO score is 82%. We identified 2 optimization opportunities across your website. Some pages may be missing important SEO elements such as metadata, heading structure, image optimization, schema markup, or keyword targeting. These issues can make it harder for search engines and AI systems to fully understand your content. Addressing these opportunities can improve both rankings and visibility.",
+      "data": {
+        "sectionName": "On-Page SEO",
+        "score": 82,
+        "issueCount": 2,
+        "checksCount": 11,
+        "accentColor": "#3b82f6"
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-2.mp3",
+      "duration": 27.428571,
+      "durationInFrames": 823
+    },
+    {
+      "id": 3,
+      "type": "homepageTechnical",
+      "title": "Technical SEO",
+      "subtitle": "Score: 100",
+      "narration": "Your Technical SEO score is 100%. We completed 6 technical checks and identified 0 issues. Technical SEO helps search engines crawl, access, and index your website efficiently. Improving technical issues can strengthen your website's foundation and overall search performance.",
+      "data": {
+        "sectionName": "Technical SEO",
+        "score": 100,
+        "issueCount": 0,
+        "checksCount": 6,
+        "accentColor": "#06b6d4"
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-3.mp3",
+      "duration": 15.960816,
+      "durationInFrames": 479
+    },
+    {
+      "id": 4,
+      "type": "homepageSecurity",
+      "title": "Security",
+      "subtitle": "Score: 0",
+      "narration": "Your Security score is 0%. We found 6 security-related issues, including 3 critical findings. Missing or misconfigured security settings may leave your website vulnerable to threats while reducing trust signals for both users and search engines. Strengthening these protections can improve website security and reliability.",
+      "data": {
+        "sectionName": "Security",
+        "score": 0,
+        "issueCount": 6,
+        "criticalCount": 3,
+        "checksCount": null,
+        "accentColor": "#ef4444"
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-4.mp3",
+      "duration": 18.285714,
+      "durationInFrames": 549
+    },
+    {
+      "id": 5,
+      "type": "homepageAIVisibility",
+      "title": "AI Visibility",
+      "subtitle": "Score: 25",
+      "narration": "Your AI Visibility score is 25%. We identified 4 AI optimization opportunities, including 4 critical issues. Your current AI Readability score is 60 out of 100. We also detected opportunities to improve AI discovery signals, structured data, content clarity, and AI search readiness. These improvements can increase your chances of appearing in AI-generated answers and recommendations.",
+      "data": {
+        "score": 25,
+        "issueCount": 4,
+        "criticalCount": 4,
+        "llmScore": 60,
+        "aiChecks": [
+          {
+            "name": "LLM Readability",
+            "rule_id": "llm_readability_poor",
+            "status": "fail",
+            "severity": "high",
+            "message": "Content structure is difficult for LLMs to understand",
+            "category": "ai"
+          },
+          {
+            "name": "llms.txt",
+            "rule_id": "llms_txt_missing",
+            "status": "fail",
+            "severity": "high",
+            "message": "llms.txt file is missing - AI search engines can't discover your content",
+            "category": "ai"
+          },
+          {
+            "name": "Structured Data Depth",
+            "rule_id": "structured_data_limited",
+            "status": "fail",
+            "severity": "high",
+            "message": "Limited structured data - AI understanding is restricted",
+            "category": "ai"
+          }
+        ]
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-5.mp3",
+      "duration": 24.607347,
+      "durationInFrames": 738
+    },
+    {
+      "id": 6,
+      "type": "homepagePerformance",
+      "title": "Performance",
+      "subtitle": "Score: 39",
+      "narration": "Your Performance score is 39%. Mobile performance scored 32, while desktop performance scored 46. Your current response time is 5.1s. We identified 1 performance-related issue that may impact loading speed, user experience, and search rankings. Improving website performance can help reduce bounce rates and increase engagement.",
+      "data": {
+        "score": 39,
+        "mobileScore": 32,
+        "desktopScore": 46,
+        "responseTime": "5.1s",
+        "issueCount": 1
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-6.mp3",
+      "duration": 22.177959,
+      "durationInFrames": 665
+    },
+    {
+      "id": 7,
+      "type": "homepageAccessibility",
+      "title": "Accessibility",
+      "subtitle": "Score: 56",
+      "narration": "Your Accessibility score is 56%. We found 3 accessibility-related issues, including 2 critical findings. These issues may create usability challenges for some visitors and affect compliance with accessibility best practices. Addressing these issues helps create a better experience for all users.",
+      "data": {
+        "sectionName": "Accessibility",
+        "score": 56,
+        "issueCount": 3,
+        "criticalCount": 2,
+        "checksCount": null,
+        "accentColor": "#10b981"
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-7.mp3",
+      "duration": 18.703673,
+      "durationInFrames": 561
+    },
+    {
+      "id": 8,
+      "type": "homepageSocialSignals",
+      "title": "Social Signals",
+      "subtitle": "3 Connected",
+      "narration": "We detected 3 connected social profiles and 2 missing social connections. Strong social signals help improve brand trust, authority, and online presence. Connecting and maintaining active profiles across major platforms can strengthen your digital footprint.",
+      "data": {
+        "connectedCount": 3,
+        "missingCount": 2,
+        "platforms": [
+          {
+            "name": "Facebook",
+            "connected": true
+          },
+          {
+            "name": "Instagram",
+            "connected": true
+          },
+          {
+            "name": "LinkedIn",
+            "connected": true
+          },
+          {
+            "name": "X/Twitter",
+            "connected": false
+          },
+          {
+            "name": "YouTube",
+            "connected": false
+          }
+        ]
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-8.mp3",
+      "duration": 15.960816,
+      "durationInFrames": 479
+    },
+    {
+      "id": 9,
+      "type": "homepageGBP",
+      "title": "Google Business Presence",
+      "subtitle": "Profile Found",
+      "narration": "Your business is listed and verified on Google Business Profile. Your business currently has a rating of 5.0 stars based on 6 customer reviews. We were able to identify business information including your address, phone number, website, and Google Maps listing. A complete and actively maintained Google Business Profile can improve visibility in Google Search, Google Maps, and local discovery results. Strong business profile signals also help build credibility and trust with potential customers.",
+      "data": {
+        "found": true,
+        "businessName": "Sapphire Digital Agency",
+        "category": "Service",
+        "rating": 5,
+        "reviewCount": 6,
+        "address": "100 Church St 8th floor, New York, NY 10007, USA",
+        "phone": "+1 302-455-2757",
+        "website": "https://www.sapphiredigitalagency.com/",
+        "mapsUrl": "https://maps.google.com/?cid=14948100748255694786&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNlEAIYBCAA",
+        "status": "verified"
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-9.mp3",
+      "duration": 34.168163,
+      "durationInFrames": 1025
+    },
+    {
+      "id": 10,
+      "type": "homepageFinalSummary",
+      "title": "Final Summary",
+      "subtitle": "Key Opportunities",
+      "narration": "Our analysis identified the biggest opportunities in the following areas. 1. Hreflang tags are missing for international SEO. 2. Content structure is difficult for LLMs to understand. 3. llms.txt file is missing - AI search engines can't discover your content. 4. Limited structured data - AI understanding is restricted. By addressing these issues, you can improve search visibility, AI discoverability, website performance, user experience, and overall digital growth. Your complete OditoAI report contains detailed findings and recommendations for every issue identified.",
+      "data": {
+        "overallScore": 65,
+        "topIssues": [
+          "Hreflang tags are missing for international SEO",
+          "Content structure is difficult for LLMs to understand",
+          "llms.txt file is missing - AI search engines can't discover your content",
+          "Limited structured data - AI understanding is restricted"
+        ]
+      },
+      "audio": "cache/audio/6a2655e32acca5b8b4061ca8-slide-10.mp3",
+      "duration": 40.724898,
+      "durationInFrames": 1222
+    }
+  ],
+  "fps": 24,
+  "durationInFrames": 5746,
+  "totalDuration": 239.412243
+}
