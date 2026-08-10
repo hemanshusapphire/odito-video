@@ -1,110 +1,22 @@
-// ── Per-scene data shapes ──────────────────────────────────────────────────────
-
-export interface IntroData {
-  url: string;
-  projectName?: string;
-  overallScore: number;
-  totalIssues: number;
-  criticalIssues: number;
-  warningIssues: number;
-  audited_at?: string;
-}
-
-export interface SectionScoreData {
-  sectionName: string;
-  score: number;
-  issueCount: number;
-  checksCount?: number;
-  criticalCount?: number;
-  accentColor: string;
-}
-
-export interface AICheck {
-  name?: string;
-  message?: string;
-  rule_id?: string;
-  passed: boolean;
-}
-
-export interface AIVisibilityData {
-  score: number;
-  llmScore: number;
-  issueCount: number;
-  criticalCount: number;
-  aiChecks: AICheck[];
-}
-
-export interface PerformanceData {
-  score: number;
-  mobileScore: number;
-  desktopScore: number;
-  responseTime: string;
-  issueCount: number;
-}
-
-export interface Platform {
-  name: string;
-  connected: boolean;
-}
-
-export interface SocialSignalsData {
-  connectedCount: number;
-  missingCount: number;
-  platforms: Platform[];
-}
-
-export interface GBPData {
-  found: boolean;
-  businessName?: string;
-  category?: string;
-  rating?: number;
-  reviewCount?: number;
-  address?: string;
-  phone?: string;
-  website?: string;
-  status?: string;
-}
-
-export type IssueSeverity = "critical" | "warning" | "info";
-
-export interface TopIssue {
-  title: string;
-  severity: IssueSeverity;
-}
-
-export interface FinalSummaryData {
-  overallScore: number;
-  topIssues: Array<string | TopIssue>;
-}
-
 // ── Slide type discriminant union ─────────────────────────────────────────────
+// These 10 types match exactly what homepageAuditProcessor._buildSlides() emits.
 
 export type SlideType =
   | "homepageIntro"
+  | "homepageOverallScore"
   | "homepageOnPage"
   | "homepageTechnical"
   | "homepageSecurity"
-  | "homepageAccessibility"
   | "homepageAIVisibility"
   | "homepagePerformance"
+  | "homepageAccessibility"
   | "homepageSocialSignals"
   | "homepageGBP"
-  | "homepageFinalSummary"
-  // v1 backward compat
-  | "homepageOverallScore"
-  | "homepageCategoryScores"
-  | "homepageTopIssues"
-  | "homepageAISummary"
-  | "homepageCTA";
+  | "homepageFinalSummary";
 
-export type SlideData =
-  | IntroData
-  | SectionScoreData
-  | AIVisibilityData
-  | PerformanceData
-  | SocialSignalsData
-  | GBPData
-  | FinalSummaryData;
+// V2 per-scene data shapes are defined here as scenes are built.
+// SlideData is a union of all scene data types.
+export type SlideData = Record<string, unknown>;
 
 // ── SlideWithAudio (what HomepageAuditVideo receives) ─────────────────────────
 

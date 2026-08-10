@@ -1,123 +1,71 @@
-// remotion/components/LogoHeader.tsx
-import { Img } from "remotion";
-import { interpolate, useCurrentFrame } from "remotion";
+import React from "react";
 
 interface LogoHeaderProps {
-  agencyName: string;
-  logoUrl?: string;
   brandColor?: string;
-  slideNumber: number;
-  totalSlides: number;
-  slideTitle: string;
+  agencyName?: string;
+  logoUrl?: string;
+  subtitle?: string;
+  style?: React.CSSProperties;
 }
 
 export const LogoHeader: React.FC<LogoHeaderProps> = ({
-  agencyName,
-  logoUrl,
   brandColor = "#7730ed",
-  slideNumber,
-  totalSlides,
-  slideTitle,
+  agencyName = "AuditIQ",
+  subtitle,
+  style,
 }) => {
-  const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 12], [0, 1], { extrapolateRight: "clamp" });
-
   return (
     <div
       style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 80,
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 60px",
-        background: "rgba(6,16,29,0.95)",
-        borderBottom: "1px solid rgba(255,255,255,0.07)",
-        opacity,
-        zIndex: 100,
+        gap: 12,
+        padding: "16px 32px",
+        borderBottom: `1px solid rgba(255,255,255,0.06)`,
+        ...style,
       }}
     >
-      {/* Logo / Agency name */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-        {logoUrl ? (
-          <Img src={logoUrl || ''} alt={agencyName} style={{ height: 36, objectFit: "contain" }} />
-        ) : (
-          <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              background: `linear-gradient(135deg, ${brandColor}, #00dfff)`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontFamily: "sans-serif",
-              fontWeight: 800,
-              fontSize: 18,
-              color: "#fff",
-            }}
-          >
-            {agencyName.charAt(0)}
-          </div>
-        )}
-        <span
+      <div
+        style={{
+          width: 36,
+          height: 36,
+          borderRadius: 8,
+          background: brandColor,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "Inter, system-ui, sans-serif",
+          fontWeight: 800,
+          fontSize: 16,
+          color: "#fff",
+        }}
+      >
+        {agencyName.slice(0, 2).toUpperCase()}
+      </div>
+      <div>
+        <div
           style={{
-            fontFamily: "sans-serif",
+            fontFamily: "Inter, system-ui, sans-serif",
             fontWeight: 700,
-            fontSize: 22,
-            color: "#eef2ff",
+            fontSize: 18,
+            color: "#f0f4ff",
             letterSpacing: "-0.02em",
           }}
         >
           {agencyName}
-        </span>
-        <span
-          style={{
-            fontSize: 14,
-            color: "rgba(255,255,255,0.35)",
-            fontFamily: "sans-serif",
-            marginLeft: 4,
-          }}
-        >
-          SEO Audit Report
-        </span>
-      </div>
-
-      {/* Slide title + progress */}
-      <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-        <span
-          style={{
-            fontFamily: "sans-serif",
-            fontSize: 18,
-            fontWeight: 600,
-            color: "rgba(255,255,255,0.6)",
-          }}
-        >
-          {slideTitle}
-        </span>
-        {/* Slide dots */}
-        <div style={{ display: "flex", gap: 7, alignItems: "center" }}>
-          {Array.from({ length: totalSlides }).map((_, i) => (
-            <div
-              key={i}
-              style={{
-                width: i === slideNumber - 1 ? 24 : 8,
-                height: 8,
-                borderRadius: 4,
-                background:
-                  i === slideNumber - 1
-                    ? brandColor
-                    : i < slideNumber - 1
-                    ? "rgba(255,255,255,0.35)"
-                    : "rgba(255,255,255,0.12)",
-                transition: "all 0.3s",
-              }}
-            />
-          ))}
         </div>
+        {subtitle && (
+          <div
+            style={{
+              fontFamily: "Inter, system-ui, sans-serif",
+              fontSize: 12,
+              color: "#6b7a9e",
+              marginTop: 2,
+            }}
+          >
+            {subtitle}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,0 +1,822 @@
+{
+  "projectId": "6a59d28b79b45fb8fbf631cb",
+  "slidesWithAudio": [
+    {
+      "id": 1,
+      "type": "cover",
+      "title": "Wowinfotech-Com",
+      "subtitle": "https://www.wowinfotech.com/",
+      "narration": "Wowinfotech-Com scores 54 out of 100 — not because the business isn't good, but because the website isn't communicating that to search engines. Let's break down exactly why.",
+      "data": {
+        "projectName": "Wowinfotech-Com",
+        "url": "https://www.wowinfotech.com/",
+        "pagesCrawled": 11,
+        "scores": {
+          "overall": 54,
+          "performance": 24,
+          "seo": 65,
+          "aiVisibility": 45,
+          "technicalHealth": 80
+        },
+        "issueDistribution": {
+          "high": 99,
+          "medium": 59,
+          "low": 0,
+          "total": 158
+        },
+        "auditDate": "July 2026",
+        "description": "A comprehensive AI visibility and SEO audit of Wowinfotech-Com."
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-1.mp3",
+      "duration": 10.161633,
+      "durationInFrames": 305
+    },
+    {
+      "id": 2,
+      "type": "scoreSummary",
+      "title": "Overall Score Analysis",
+      "subtitle": "Score: 54/100",
+      "narration": "Your overall score is 54 out of 100. Technical at 80 is performing strongly. SEO at 65 shows moderate performance. Performance at 24 and AI Visibility at 45 are underperforming and need immediate attention. These gaps are severely limiting your growth and require urgent action.",
+      "data": {
+        "scores": {
+          "overall": 54,
+          "performance": 24,
+          "seo": 65,
+          "aiVisibility": 45,
+          "technicalHealth": 80
+        },
+        "overall": 54
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-2.mp3",
+      "duration": 19.539592,
+      "durationInFrames": 586
+    },
+    {
+      "id": 3,
+      "type": "issueDistribution",
+      "title": "Issue Distribution",
+      "subtitle": "158 Total Issues",
+      "narration": "158 issues found — and 99 of them are high priority. That means 63% of your problems are actively costing you rankings right now, today.",
+      "data": {
+        "issueDistribution": {
+          "high": 99,
+          "medium": 59,
+          "low": 0,
+          "total": 158
+        },
+        "total": 158
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-3.mp3",
+      "duration": 8.96,
+      "durationInFrames": 269
+    },
+    {
+      "id": 4,
+      "type": "highIssues",
+      "title": "High Priority Issues",
+      "subtitle": "Showing top 3 of 99 high-priority issues",
+      "narration": "These high priority issues are the ones bleeding your score the most. Every one of them fixed is a direct point gain — address them first and your overall score could jump significantly within 30 days.",
+      "data": {
+        "issues": [
+          {
+            "issue": "Focus trap detected - keyboard users cannot navigate away from certain elements",
+            "severity": "high",
+            "pages": 11,
+            "count": 22,
+            "recommendation": "Address within 7 days - high priority for SEO improvement"
+          },
+          {
+            "issue": "Images Missing Alt Text",
+            "severity": "high",
+            "pages": 11,
+            "count": 11,
+            "recommendation": "Address within 7 days - high priority for SEO improvement"
+          },
+          {
+            "issue": "CSS removes focus indicators: 'outline: none' found in page source",
+            "severity": "high",
+            "pages": 11,
+            "count": 11,
+            "recommendation": "Address within 7 days - high priority for SEO improvement"
+          }
+        ],
+        "count": 3,
+        "totalHigh": 99,
+        "hasZeroIssues": false
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-4.mp3",
+      "duration": 11.52,
+      "durationInFrames": 346
+    },
+    {
+      "id": 5,
+      "type": "mediumIssues",
+      "title": "Medium Priority Issues",
+      "subtitle": "Showing top 3 of 59 issues",
+      "narration": "Your medium priority issues aren't urgent, but they're adding up quietly. Resolve these and you're not just fixing problems — you're sending search engines a signal that this site is actively maintained and trustworthy.",
+      "data": {
+        "issues": [
+          {
+            "issue": "Author section missing real person photo",
+            "severity": "medium",
+            "pages": 11,
+            "count": 11,
+            "recommendation": "Add real author photo next to author bio section. Use professional headshot, not stock images or generic graphics."
+          },
+          {
+            "issue": "Page missing visible date information (schema dates present but not visible)",
+            "severity": "medium",
+            "pages": 11,
+            "count": 11,
+            "recommendation": "Add visible publication or last-updated date in page content. Use formats like 'Last updated: Month DD, YYYY' or 'Published: Month DD, YYYY' near the title or at the bottom of the content."
+          },
+          {
+            "issue": "Small tap targets detected: 3 interactive elements smaller than 24×24px",
+            "severity": "medium",
+            "pages": 11,
+            "count": 11,
+            "recommendation": "Plan to fix within 30 days - moderate SEO impact"
+          }
+        ],
+        "count": 3,
+        "totalMedium": 59,
+        "hasZeroIssues": false
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-5.mp3",
+      "duration": 11.885714,
+      "durationInFrames": 357
+    },
+    {
+      "id": 6,
+      "type": "lowIssues",
+      "title": "Low Priority Issues",
+      "subtitle": "No issues detected 🎉",
+      "narration": "The good news is, there are no low-priority issues detected. This means your site is already clean at the foundational level, allowing you to focus on higher-impact improvements.",
+      "data": {
+        "issues": [],
+        "count": 0,
+        "totalLow": 0,
+        "hasZeroIssues": true
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-6.mp3",
+      "duration": 10.057143,
+      "durationInFrames": 302
+    },
+    {
+      "id": 7,
+      "type": "technicalHighlights",
+      "title": "Technical Highlights",
+      "subtitle": "Technical SEO Overview",
+      "narration": "80 is decent — but all 11 pages are missing security headers, which search engines flag as unsafe. Plus inconsistent H1 tags mean search engines can't identify what your pages are actually about.",
+      "data": {
+        "auditSnapshot": {
+          "technicalHighlights": {
+            "checks": [
+              {
+                "name": "SSL Certificate",
+                "status": "PASS",
+                "detail": "SSL certificate is valid and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "11 pages missing critical security headers",
+                "affected_pages": 11
+              },
+              {
+                "name": "Canonical Tags",
+                "status": "PASS",
+                "detail": "Canonical tags properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Robots.txt",
+                "status": "PASS",
+                "detail": "Robots.txt is accessible and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Noindex on Key Pages",
+                "status": "PASS",
+                "detail": "All important pages are indexable",
+                "affected_pages": 0
+              },
+              {
+                "name": "H1 Tags",
+                "status": "WARN",
+                "detail": "0 pages missing H1, 1 with multiple H1s",
+                "affected_pages": 1
+              },
+              {
+                "name": "Structured Data / Schema",
+                "status": "PASS",
+                "detail": "10 pages with valid structured data",
+                "affected_pages": 0
+              },
+              {
+                "name": "Mobile Friendliness",
+                "status": "PASS",
+                "detail": "Mobile-friendly configuration detected",
+                "affected_pages": 0
+              },
+              {
+                "name": "XML Sitemap",
+                "status": "PASS",
+                "detail": "XML sitemap accessible with 460 URLs",
+                "affected_pages": 0
+              },
+              {
+                "name": "OG / Social Tags",
+                "status": "PASS",
+                "detail": "Social media tags properly configured",
+                "affected_pages": 0
+              }
+            ],
+            "criticalIssues": [
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "11 pages missing critical security headers",
+                "affected_pages": 11
+              }
+            ],
+            "topRecommendations": [
+              {
+                "name": "SSL Certificate",
+                "status": "PASS",
+                "detail": "SSL certificate is valid and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Security Headers",
+                "status": "FAIL",
+                "detail": "11 pages missing critical security headers",
+                "affected_pages": 11
+              },
+              {
+                "name": "Canonical Tags",
+                "status": "PASS",
+                "detail": "Canonical tags properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Robots.txt",
+                "status": "PASS",
+                "detail": "Robots.txt is accessible and properly configured",
+                "affected_pages": 0
+              },
+              {
+                "name": "Noindex on Key Pages",
+                "status": "PASS",
+                "detail": "All important pages are indexable",
+                "affected_pages": 0
+              }
+            ]
+          },
+          "scores": {
+            "overall": 54,
+            "performance": 24,
+            "seo": 65,
+            "aiVisibility": 45,
+            "technicalHealth": 80
+          },
+          "issueDistribution": {
+            "high": 99,
+            "medium": 59,
+            "low": 0,
+            "total": 158
+          }
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-7.mp3",
+      "duration": 12.852245,
+      "durationInFrames": 386
+    },
+    {
+      "id": 8,
+      "type": "aiVisibilityOverview",
+      "title": "AI Visibility Overview",
+      "subtitle": "AI Score: 45/100",
+      "narration": "Your AI Visibility score is 45 out of 100, analyzed across 11 pages. AEO at 28 and GEO at 23 are the primary areas needing improvement. There are 110 AI-specific issues to address, with 38 high-priority items requiring immediate attention.",
+      "data": {
+        "aiHubSnapshot": {
+          "overallScore": 45,
+          "pagesScored": 11,
+          "hubScores": {
+            "aiso": 84,
+            "aeo": 28,
+            "geo": 23
+          },
+          "issuesBySeverity": {
+            "critical": 12,
+            "high": 38,
+            "medium": 51,
+            "low": 21
+          },
+          "aiso": {
+            "score": 84,
+            "cards": {
+              "crawlability": {
+                "score": 100,
+                "rule_count": 10,
+                "pages_scored": 11,
+                "checks_executed": 110,
+                "total_passed": 110,
+                "total_failed": 0
+              },
+              "citability": {
+                "score": 100,
+                "rule_count": 3,
+                "pages_scored": 11,
+                "checks_executed": 33,
+                "total_passed": 33,
+                "total_failed": 0
+              },
+              "authority": {
+                "score": 41,
+                "rule_count": 2,
+                "pages_scored": 11,
+                "checks_executed": 27,
+                "total_passed": 11,
+                "total_failed": 16
+              },
+              "coverage": {
+                "score": 93,
+                "rule_count": 6,
+                "pages_scored": 11,
+                "checks_executed": 76,
+                "total_passed": 71,
+                "total_failed": 5
+              }
+            },
+            "bots": {
+              "gptbot_blocked": "pass",
+              "perplexitybot_blocked": "pass",
+              "claudebot_blocked": "pass",
+              "google_extended_blocked": "pass",
+              "bingbot_blocked": "pass",
+              "gptbot_explicit_allow": "fail",
+              "claudebot_explicit_allow": "fail",
+              "perplexitybot_explicit_allow": "fail",
+              "raw_rules_count": "fail",
+              "llms_txt": "optimized"
+            },
+            "issueDistribution": {
+              "critical": 0,
+              "high": 1,
+              "medium": 20,
+              "low": 0,
+              "total": 21
+            }
+          },
+          "aeo": {
+            "score": 28,
+            "cards": {
+              "answer_readiness": {
+                "score": 37,
+                "rule_count": 2,
+                "pages_scored": 11,
+                "checks_executed": 30,
+                "total_passed": 11,
+                "total_failed": 19
+              },
+              "question_coverage": {
+                "score": 57,
+                "rule_count": 1,
+                "pages_scored": 11,
+                "checks_executed": 21,
+                "total_passed": 12,
+                "total_failed": 9
+              },
+              "faq_coverage": {
+                "score": 0,
+                "rule_count": 0,
+                "pages_scored": 11,
+                "checks_executed": 3,
+                "total_passed": 0,
+                "total_failed": 3
+              },
+              "snippet_score": {
+                "score": 45,
+                "rule_count": 2,
+                "pages_scored": 11,
+                "checks_executed": 31,
+                "total_passed": 14,
+                "total_failed": 17
+              },
+              "voice_search": {
+                "score": 0,
+                "rule_count": 0,
+                "pages_scored": 11,
+                "checks_executed": 10,
+                "total_passed": 0,
+                "total_failed": 10
+              }
+            },
+            "signals": [
+              {
+                "rule_id": "AEO-046",
+                "pages_failing": 10,
+                "score": 9,
+                "status": "fail"
+              },
+              {
+                "rule_id": "AEO-047",
+                "pages_failing": 9,
+                "score": 18,
+                "status": "fail"
+              },
+              {
+                "rule_id": "AEO-048",
+                "pages_failing": 3,
+                "score": 73,
+                "status": "pass"
+              },
+              {
+                "rule_id": "AEO-049",
+                "pages_failing": 0,
+                "score": 100,
+                "status": "pass"
+              },
+              {
+                "rule_id": "AEO-055",
+                "pages_failing": 10,
+                "score": 9,
+                "status": "fail"
+              }
+            ],
+            "issueDistribution": {
+              "critical": 10,
+              "high": 27,
+              "medium": 11,
+              "low": 10,
+              "total": 58
+            }
+          },
+          "geo": {
+            "score": 23,
+            "cards": {
+              "entity_authority": {
+                "score": 33,
+                "rule_count": 0,
+                "pages_scored": 11,
+                "checks_executed": 9,
+                "total_passed": 3,
+                "total_failed": 6
+              },
+              "knowledge_graph_score": {
+                "score": 17,
+                "rule_count": 0,
+                "pages_scored": 11,
+                "checks_executed": 6,
+                "total_passed": 1,
+                "total_failed": 5
+              },
+              "brand_corroboration": {
+                "score": 5,
+                "rule_count": 1,
+                "pages_scored": 11,
+                "checks_executed": 20,
+                "total_passed": 1,
+                "total_failed": 19
+              },
+              "schema_coverage": {
+                "score": 38,
+                "rule_count": 1,
+                "pages_scored": 11,
+                "checks_executed": 21,
+                "total_passed": 8,
+                "total_failed": 13
+              }
+            },
+            "entityTrustScore": "C",
+            "issueDistribution": {
+              "critical": 2,
+              "high": 10,
+              "medium": 20,
+              "low": 11,
+              "total": 43
+            }
+          }
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-8.mp3",
+      "duration": 17.81551,
+      "durationInFrames": 534
+    },
+    {
+      "id": 9,
+      "type": "aisoHub",
+      "title": "AI Search Optimization",
+      "subtitle": "AISO Score: 84/100",
+      "narration": "Your AI Search Optimization score is 84. Your site is well-positioned for AI crawler access and citation. Resolving the 1 high-priority AISO issues will directly improve your AI crawler accessibility.",
+      "data": {
+        "aiso": {
+          "score": 84,
+          "cards": {
+            "crawlability": {
+              "score": 100,
+              "rule_count": 10,
+              "pages_scored": 11,
+              "checks_executed": 110,
+              "total_passed": 110,
+              "total_failed": 0
+            },
+            "citability": {
+              "score": 100,
+              "rule_count": 3,
+              "pages_scored": 11,
+              "checks_executed": 33,
+              "total_passed": 33,
+              "total_failed": 0
+            },
+            "authority": {
+              "score": 41,
+              "rule_count": 2,
+              "pages_scored": 11,
+              "checks_executed": 27,
+              "total_passed": 11,
+              "total_failed": 16
+            },
+            "coverage": {
+              "score": 93,
+              "rule_count": 6,
+              "pages_scored": 11,
+              "checks_executed": 76,
+              "total_passed": 71,
+              "total_failed": 5
+            }
+          },
+          "bots": {
+            "gptbot_blocked": "pass",
+            "perplexitybot_blocked": "pass",
+            "claudebot_blocked": "pass",
+            "google_extended_blocked": "pass",
+            "bingbot_blocked": "pass",
+            "gptbot_explicit_allow": "fail",
+            "claudebot_explicit_allow": "fail",
+            "perplexitybot_explicit_allow": "fail",
+            "raw_rules_count": "fail",
+            "llms_txt": "optimized"
+          },
+          "issueDistribution": {
+            "critical": 0,
+            "high": 1,
+            "medium": 20,
+            "low": 0,
+            "total": 21
+          }
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-9.mp3",
+      "duration": 12.016327,
+      "durationInFrames": 360
+    },
+    {
+      "id": 10,
+      "type": "aeoHub",
+      "title": "Answer Engine Optimization",
+      "subtitle": "AEO Score: 28/100",
+      "narration": "Your Answer Engine Optimization score is 28. Your content is not yet optimized for AI assistants to find and deliver accurate answers. 2 of 5 AEO signals are passing. Address the 27 high-priority AEO issues to significantly boost your answer engine rankings.",
+      "data": {
+        "aeo": {
+          "score": 28,
+          "cards": {
+            "answer_readiness": {
+              "score": 37,
+              "rule_count": 2,
+              "pages_scored": 11,
+              "checks_executed": 30,
+              "total_passed": 11,
+              "total_failed": 19
+            },
+            "question_coverage": {
+              "score": 57,
+              "rule_count": 1,
+              "pages_scored": 11,
+              "checks_executed": 21,
+              "total_passed": 12,
+              "total_failed": 9
+            },
+            "faq_coverage": {
+              "score": 0,
+              "rule_count": 0,
+              "pages_scored": 11,
+              "checks_executed": 3,
+              "total_passed": 0,
+              "total_failed": 3
+            },
+            "snippet_score": {
+              "score": 45,
+              "rule_count": 2,
+              "pages_scored": 11,
+              "checks_executed": 31,
+              "total_passed": 14,
+              "total_failed": 17
+            },
+            "voice_search": {
+              "score": 0,
+              "rule_count": 0,
+              "pages_scored": 11,
+              "checks_executed": 10,
+              "total_passed": 0,
+              "total_failed": 10
+            }
+          },
+          "signals": [
+            {
+              "rule_id": "AEO-046",
+              "pages_failing": 10,
+              "score": 9,
+              "status": "fail"
+            },
+            {
+              "rule_id": "AEO-047",
+              "pages_failing": 9,
+              "score": 18,
+              "status": "fail"
+            },
+            {
+              "rule_id": "AEO-048",
+              "pages_failing": 3,
+              "score": 73,
+              "status": "pass"
+            },
+            {
+              "rule_id": "AEO-049",
+              "pages_failing": 0,
+              "score": 100,
+              "status": "pass"
+            },
+            {
+              "rule_id": "AEO-055",
+              "pages_failing": 10,
+              "score": 9,
+              "status": "fail"
+            }
+          ],
+          "issueDistribution": {
+            "critical": 10,
+            "high": 27,
+            "medium": 11,
+            "low": 10,
+            "total": 58
+          }
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-10.mp3",
+      "duration": 17.92,
+      "durationInFrames": 538
+    },
+    {
+      "id": 11,
+      "type": "geoHub",
+      "title": "Generative Engine Optimization",
+      "subtitle": "GEO Score: 23/100",
+      "narration": "Your Generative Engine Optimization score is 23, giving you an entity trust grade of C. Your entity signals are weak, causing generative engines to overlook your content. Your strongest GEO area is Schema Coverage at 38. Fixing the 10 high-priority GEO issues will strengthen your entity trust signals.",
+      "data": {
+        "geo": {
+          "score": 23,
+          "cards": {
+            "entity_authority": {
+              "score": 33,
+              "rule_count": 0,
+              "pages_scored": 11,
+              "checks_executed": 9,
+              "total_passed": 3,
+              "total_failed": 6
+            },
+            "knowledge_graph_score": {
+              "score": 17,
+              "rule_count": 0,
+              "pages_scored": 11,
+              "checks_executed": 6,
+              "total_passed": 1,
+              "total_failed": 5
+            },
+            "brand_corroboration": {
+              "score": 5,
+              "rule_count": 1,
+              "pages_scored": 11,
+              "checks_executed": 20,
+              "total_passed": 1,
+              "total_failed": 19
+            },
+            "schema_coverage": {
+              "score": 38,
+              "rule_count": 1,
+              "pages_scored": 11,
+              "checks_executed": 21,
+              "total_passed": 8,
+              "total_failed": 13
+            }
+          },
+          "entityTrustScore": "C",
+          "issueDistribution": {
+            "critical": 2,
+            "high": 10,
+            "medium": 20,
+            "low": 11,
+            "total": 43
+          }
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-11.mp3",
+      "duration": 19.043265,
+      "durationInFrames": 571
+    },
+    {
+      "id": 12,
+      "type": "performanceSummary",
+      "title": "Performance Summary",
+      "subtitle": "Performance Score: 24",
+      "narration": "Your performance score is 24. Mobile performance is lagging at 15 compared to desktop at 44. This indicates serious performance bottlenecks affecting load speed and user experience. Focus on optimizing heavy assets, enabling compression, and improving load efficiency for quick gains.",
+      "data": {
+        "pageSpeed": 24,
+        "mobileScore": 15,
+        "desktopScore": 44
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-12.mp3",
+      "duration": 16.796735,
+      "durationInFrames": 504
+    },
+    {
+      "id": 13,
+      "type": "coreWebVitals",
+      "title": "Core Web Vitals",
+      "subtitle": "User Experience Metrics",
+      "narration": "Your main content takes 19.2 s seconds to appear on mobile — search engine guidelines recommend 2.5. That gap is where your visitors lose patience and leave. Desktop is better, but still problematic.",
+      "data": {
+        "mobile": {
+          "lcp": "19.2 s",
+          "tbt": "1,340 ms",
+          "fcp": "2.6 s",
+          "cls": "0.67",
+          "score": 15
+        },
+        "desktop": {
+          "lcp": "1.0 s",
+          "tbt": "920 ms",
+          "fcp": "0.6 s",
+          "cls": "0.488",
+          "score": 44
+        }
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-13.mp3",
+      "duration": 13.035102,
+      "durationInFrames": 391
+    },
+    {
+      "id": 14,
+      "type": "keywords",
+      "title": "Keyword Performance",
+      "subtitle": "1 Keywords Tracked",
+      "narration": "You have 1 keywords positioned just outside the top 10, representing immediate growth opportunities. With focused optimization, these could move to page one and significantly increase your organic traffic.",
+      "data": {
+        "totalKeywords": 1,
+        "topRankings": [],
+        "opportunities": [
+          {
+            "keyword": "best it company near me",
+            "rank": 16,
+            "status": "ranking"
+          }
+        ],
+        "notRanking": []
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-14.mp3",
+      "duration": 10.997551,
+      "durationInFrames": 330
+    },
+    {
+      "id": 15,
+      "type": "ctaClosure",
+      "title": "What's Next?",
+      "subtitle": "Take Action on Your SEO & AI Growth",
+      "narration": "Now you have two clear paths. You can use the AI-powered suggestions provided in this audit and implement them yourself. Or, if you'd prefer faster and expert-driven results, our team can handle everything for you. Let's take your SEO and AI visibility to the next level.",
+      "data": {
+        "cards": [
+          {
+            "title": "Use AI Suggestions",
+            "description": "Follow the AI recommendations provided in this audit to improve your SEO step by step."
+          },
+          {
+            "title": "Do It Yourself",
+            "description": "Apply the fixes on your own using the insights and improve your rankings gradually."
+          },
+          {
+            "title": "Let Us Handle It",
+            "description": "Our team can implement everything for you. Get in touch and scale your SEO faster."
+          }
+        ]
+      },
+      "audio": "cache/audio/6a59d28b79b45fb8fbf631cb-slide-15.mp3",
+      "duration": 15.46449,
+      "durationInFrames": 464
+    }
+  ],
+  "fps": 24,
+  "durationInFrames": 4994,
+  "totalDuration": 208.065307
+}

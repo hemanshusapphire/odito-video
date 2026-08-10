@@ -1,0 +1,17 @@
+import { bundle } from '@remotion/bundler';
+import { renderStill, selectComposition } from '@remotion/renderer';
+import { readFileSync, mkdirSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.resolve(__dirname, '..');
+mkdirSync(path.join(ROOT, 'temp/screenshots'), { recursive: true });
+const { props } = JSON.parse(readFileSync(path.join(ROOT, 'temp/render-validation-props.json'), 'utf8'));
+const targetFrame = parseInt(process.argv[2] || '210', 10);
+const outFile = path.join(ROOT, `temp/screenshots/scene-01-frame${targetFrame}.png`);
+console.log(`[frame] Bundling...`);
+const url = await bundle({ entryPoint: path.join(ROOT, 'src/index.ts'), webpackOverride: c => c });
+const comp = await selectComposition({ serveUrl: url, id: 'HomepageAuditVideo', inputProps: props });
+console.log(`[frame] Rendering frame ${targetFrame}...`);
+await renderStill({ composition: comp, serveUrl: url, output: outFile, frame: targetFrame, inputProps: props, imageFormat: 'png' });
+console.log(`[frame] ✅ ${outFile}`);

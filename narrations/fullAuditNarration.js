@@ -29,80 +29,6 @@ function generateKeywordNarration(keywordData) {
   return `You're tracking ${totalKeywords} keywords. Some are performing well while others present opportunities for improvement. Let's explore how to optimize your keyword strategy for better search visibility.`;
 }
 
-function generateAIOverviewNarration(aiVisibilityScore, hasKnowledgeGraph) {
-  const score = aiVisibilityScore || 0;
-  if (score >= 70) return `Your AI visibility score is ${score}. Your brand has strong presence in AI-generated search results.`;
-  if (score >= 50) return `Your AI visibility score is ${score}. Your brand has moderate presence in AI-generated search results.`;
-  return `Your AI visibility score is ${score}. Your brand has limited presence in AI-generated search results.`;
-}
-
-function generateAICategoryNarration(categories) {
-  const scores = Object.values(categories).filter(s => s > 0);
-  const avgScore = scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 50;
-  if (avgScore >= 70) return 'Your AI performance shows strong results across key categories, indicating solid optimization for AI search visibility.';
-  if (avgScore >= 50) return 'Your AI performance varies across key categories, with moderate optimization overall.';
-  return 'Your AI performance needs attention across multiple categories to improve search visibility.';
-}
-
-function generateAIDetailedMetricsNarration(detailedMetrics) {
-  return 'Your technical AI readiness shows improvement opportunities in schema, FAQs, and content structure.';
-}
-
-function generateAITopIssuesNarration(checklist) {
-  const topIssues = extractTopIssues(checklist);
-  if (topIssues.length === 0) return 'Your AI optimization shows no critical issues.';
-  return `These are the top 3 critical issues impacting your AI visibility.`;
-}
-
-function extractTopIssues(checklist) {
-  if (!Array.isArray(checklist) || checklist.length === 0) return [];
-
-  const sortedIssues = [...checklist]
-    .map(issue => {
-      const title = issue.title || issue.description || issue.item || 'Unknown issue';
-      const scoreMatch = title.match(/scored\s+(\d+(?:\.\d+)?)/);
-      const realScore = scoreMatch ? parseFloat(scoreMatch[1]) : (issue.score || issue.score_value || 0);
-
-      let cleanTitle = title
-        .replace(/^Rule\s+/i, '')
-        .replace(/\s+scored\s+\d+(?:\.\d+)?\s*$/i, '')
-        .trim();
-
-      cleanTitle = cleanTitle
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase())
-        .trim();
-
-      if (!cleanTitle) {
-        cleanTitle = title
-          .replace(/^Rule\s+\w+\s+scored\s+\d+(?:\.\d+)?$/i, 'Technical Issue')
-          .trim();
-      }
-
-      return {
-        title: cleanTitle,
-        score: realScore,
-        status: issue.status || 'info',
-        category: 'general',
-        recommendation: issue.recommendation || ''
-      };
-    })
-    .sort((a, b) => a.score - b.score)
-    .slice(0, 3);
-
-  return sortedIssues;
-}
-
-function deriveCategory(title) {
-  const lowerTitle = title.toLowerCase();
-  if (lowerTitle.includes('schema') || lowerTitle.includes('structured')) return 'schema';
-  if (lowerTitle.includes('faq') || lowerTitle.includes('question')) return 'faq';
-  if (lowerTitle.includes('entity') || lowerTitle.includes('knowledge')) return 'entity';
-  if (lowerTitle.includes('citation') || lowerTitle.includes('authority')) return 'citation';
-  if (lowerTitle.includes('conversational') || lowerTitle.includes('content')) return 'content';
-  return 'general';
-}
-
 function generateIssueNarration(totalCount, shownCount, issueType) {
   if (shownCount < totalCount) {
     return `Your website has ${totalCount} ${issueType}-priority issues. Showing the top ${shownCount} most important issues that need attention.`;
@@ -182,19 +108,143 @@ function extractCoreWebVitals(performanceMetrics) {
   }
 }
 
+function generateAIVisibilityOverviewNarration(aiHubSnapshot) {
+  if (!aiHubSnapshot) {
+    return 'Your AI Visibility data is being analyzed. Once complete, you will see detailed scores across AISO, AEO, and GEO dimensions.';
+  }
+  const { overallScore, pagesScored, hubScores, issuesBySeverity } = aiHubSnapshot;
+  const aisoS = hubScores?.aiso ?? 0;
+  const aeoS  = hubScores?.aeo  ?? 0;
+  const geoS  = hubScores?.geo  ?? 0;
+  const highCount = issuesBySeverity?.high ?? 0;
+  const total = highCount + (issuesBySeverity?.medium ?? 0) + (issuesBySeverity?.low ?? 0);
+
+  let n = `Your AI Visibility score is ${overallScore} out of 100, analyzed across ${pagesScored} pages. `;
+
+  const weak = [];
+  if (aisoS < 70) weak.push(`AISO at ${aisoS}`);
+  if (aeoS  < 70) weak.push(`AEO at ${aeoS}`);
+  if (geoS  < 70) weak.push(`GEO at ${geoS}`);
+
+  if (weak.length === 0) {
+    n += 'All three AI dimensions are performing well — your content is discoverable, answerable, and trusted by generative engines. ';
+  } else if (weak.length === 1) {
+    n += `${weak[0]} is the primary area needing improvement. `;
+  } else {
+    n += `${weak.join(' and ')} are the primary areas needing improvement. `;
+  }
+
+  if (total > 0) {
+    n += `There are ${total} AI-specific issues to address, with ${highCount} high-priority items requiring immediate attention.`;
+  }
+  return n;
+}
+
+function generateAISONarration(aisoData) {
+  if (!aisoData) {
+    return 'AISO data is being processed. This hub measures how well AI search agents can crawl, index, and cite your content.';
+  }
+  const { score, cards, issueDistribution } = aisoData;
+  const crawlScore = cards?.crawlability?.score ?? 0;
+  const citeScore  = cards?.citability?.score   ?? 0;
+  const highCount  = issueDistribution?.high     ?? 0;
+
+  let n = `Your AI Search Optimization score is ${score}. `;
+
+  if (score >= 70) {
+    n += 'Your site is well-positioned for AI crawler access and citation. ';
+  } else if (score >= 40) {
+    n += 'There are meaningful gaps preventing full AI crawler access and indexing. ';
+  } else {
+    n += 'Significant barriers are blocking AI crawlers from indexing your content effectively. ';
+  }
+
+  if (crawlScore < 70) {
+    n += `Crawlability at ${crawlScore} indicates AI bots face obstacles reaching your pages. `;
+  }
+  if (citeScore < 70) {
+    n += `Citability at ${citeScore} means your content is not yet structured for AI citation. `;
+  }
+  if (highCount > 0) {
+    n += `Resolving the ${highCount} high-priority AISO issues will directly improve your AI crawler accessibility.`;
+  }
+  return n;
+}
+
+function generateAEONarration(aeoData) {
+  if (!aeoData) {
+    return 'AEO data is being processed. This hub measures how well your content answers questions posed to AI assistants.';
+  }
+  const { score, signals, issueDistribution } = aeoData;
+  const passingSignals = (signals || []).filter(s => s.status === 'pass').length;
+  const totalSignals   = (signals || []).length;
+  const highCount      = issueDistribution?.high ?? 0;
+
+  let n = `Your Answer Engine Optimization score is ${score}. `;
+
+  if (score >= 70) {
+    n += 'Your content is well-structured for AI assistants to extract direct answers. ';
+  } else if (score >= 40) {
+    n += 'Your content partially meets AEO standards but has structural gaps AI assistants struggle with. ';
+  } else {
+    n += 'Your content is not yet optimized for AI assistants to find and deliver accurate answers. ';
+  }
+
+  if (totalSignals > 0) {
+    n += `${passingSignals} of ${totalSignals} AEO signals are passing. `;
+  }
+  if (highCount > 0) {
+    n += `Address the ${highCount} high-priority AEO issues to significantly boost your answer engine rankings.`;
+  }
+  return n;
+}
+
+function generateGEONarration(geoData) {
+  if (!geoData) {
+    return 'GEO data is being processed. This hub measures how well generative AI engines trust and feature your content.';
+  }
+  const { score, entityTrustScore, cards, issueDistribution } = geoData;
+  const GEO_CARD_LABELS = {
+    entity_authority:      'Entity Authority',
+    knowledge_graph_score: 'Knowledge Graph',
+    brand_corroboration:   'Brand Corroboration',
+    schema_coverage:       'Schema Coverage',
+  };
+  const topCard = Object.entries(cards || {})
+    .map(([key, c]) => ({ key, score: c?.score ?? 0 }))
+    .sort((a, b) => b.score - a.score)[0] ?? null;
+  const highCount = issueDistribution?.high ?? 0;
+
+  let n = `Your Generative Engine Optimization score is ${score}, giving you an entity trust grade of ${entityTrustScore}. `;
+
+  if (score >= 70) {
+    n += 'Generative AI engines recognize your entity and surface your content with confidence. ';
+  } else if (score >= 40) {
+    n += 'Generative engines partially trust your entity but lack enough signals to feature you consistently. ';
+  } else {
+    n += 'Your entity signals are weak, causing generative engines to overlook your content. ';
+  }
+
+  if (topCard && topCard.score > 0) {
+    n += `Your strongest GEO area is ${GEO_CARD_LABELS[topCard.key] ?? topCard.key} at ${topCard.score}. `;
+  }
+  if (highCount > 0) {
+    n += `Fixing the ${highCount} high-priority GEO issues will strengthen your entity trust signals.`;
+  }
+  return n;
+}
+
 module.exports = {
   generateKeywordNarration,
-  generateAIOverviewNarration,
-  generateAICategoryNarration,
-  generateAIDetailedMetricsNarration,
-  generateAITopIssuesNarration,
-  extractTopIssues,
-  deriveCategory,
   generateIssueNarration,
   generateTechnicalNarration,
   extractFirstFailingCheck,
   getPerformanceGrade,
   getLCPValue,
   generateCoreWebVitalsNarration,
-  extractCoreWebVitals
+  extractCoreWebVitals,
+  generateAIVisibilityOverviewNarration,
+  generateAISONarration,
+  generateAEONarration,
+  generateGEONarration,
 };

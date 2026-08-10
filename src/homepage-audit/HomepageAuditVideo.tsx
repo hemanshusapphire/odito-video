@@ -1,42 +1,35 @@
 import { AbsoluteFill, Audio, Sequence, interpolate, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
 import { useMemo } from "react";
 
-import { IntroScene }                  from "./scenes/IntroScene";
-import { SectionScoreScene }           from "./scenes/SectionScoreScene";
-import { AIVisibilityScene }           from "./scenes/AIVisibilityScene";
-import { PerformanceScene }            from "./scenes/PerformanceScene";
-import { SocialSignalsScene }          from "./scenes/SocialSignalsScene";
-import { GoogleBusinessPresenceScene } from "./scenes/GoogleBusinessPresenceScene";
-import { FinalSummaryScene }           from "./scenes/FinalSummaryScene";
-import { OverallScoreScene }           from "./scenes/OverallScoreScene";
-import { CategoryScoresScene }         from "./scenes/CategoryScoresScene";
-import { TopIssuesScene }              from "./scenes/TopIssuesScene";
-import { AISummaryScene }              from "./scenes/AISummaryScene";
-import { CTAScene }                    from "./scenes/CTAScene";
-
 import { buildSlideTiming, totalFrames } from "../lib/utils";
-import { background } from "../lib/colors";
 import type { HomepageAuditVideoProps, SlideType, SlideData } from "../lib/types";
 
-const SCENE_MAP: Record<SlideType, React.FC<{ data: SlideData; narration?: string }>> = {
-  homepageIntro:          IntroScene           as React.FC<{ data: SlideData; narration?: string }>,
-  homepageOnPage:         SectionScoreScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageTechnical:      SectionScoreScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageSecurity:       SectionScoreScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageAccessibility:  SectionScoreScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageAIVisibility:   AIVisibilityScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepagePerformance:    PerformanceScene     as React.FC<{ data: SlideData; narration?: string }>,
-  homepageSocialSignals:  SocialSignalsScene   as React.FC<{ data: SlideData; narration?: string }>,
-  homepageGBP:            GoogleBusinessPresenceScene as React.FC<{ data: SlideData; narration?: string }>,
-  homepageFinalSummary:   FinalSummaryScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageOverallScore:   OverallScoreScene    as React.FC<{ data: SlideData; narration?: string }>,
-  homepageCategoryScores: CategoryScoresScene  as React.FC<{ data: SlideData; narration?: string }>,
-  homepageTopIssues:      TopIssuesScene       as React.FC<{ data: SlideData; narration?: string }>,
-  homepageAISummary:      AISummaryScene       as React.FC<{ data: SlideData; narration?: string }>,
-  homepageCTA:            CTAScene             as React.FC<{ data: SlideData; narration?: string }>,
+import { IntroScene }          from "./Screen1IntroScene";
+import { OverallScoreScene }   from "./Screen2OverallScoreScene";
+import { OnPageSeoScene }      from "./Screen3OnPageSeoScene";
+import { TechnicalSeoScene }   from "./Screen4TechnicalSeoScene";
+import { SecurityScene }       from "./Screen5SecurityScene";
+import { AiVisibilityScene }   from "./Screen6AiVisibilityScene";
+import { PerformanceScene }      from "./Screen7PerformanceScene";
+import { AccessibilityScene }    from "./Screen8AccessibilityScene";
+import { SocialSignalsScene }    from "./Screen9SocialSignalsScene";
+import { LocalBusinessScene }    from "./Screen10LocalBusinessScene";
+import { FinalSummaryScene }     from "./Screen11FinalCtaScene";
+
+const SCENE_MAP: Partial<Record<SlideType, React.FC<{ data: SlideData; narration?: string }>>> = {
+  homepageIntro:         IntroScene        as React.FC<{ data: SlideData; narration?: string }>,
+  homepageOverallScore:  OverallScoreScene as React.FC<{ data: SlideData; narration?: string }>,
+  homepageOnPage:        OnPageSeoScene    as React.FC<{ data: SlideData; narration?: string }>,
+  homepageTechnical:     TechnicalSeoScene as React.FC<{ data: SlideData; narration?: string }>,
+  homepageSecurity:      SecurityScene     as React.FC<{ data: SlideData; narration?: string }>,
+  homepageAIVisibility:  AiVisibilityScene  as React.FC<{ data: SlideData; narration?: string }>,
+  homepagePerformance:   PerformanceScene   as React.FC<{ data: SlideData; narration?: string }>,
+  homepageAccessibility: AccessibilityScene as React.FC<{ data: SlideData; narration?: string }>,
+  homepageSocialSignals: SocialSignalsScene as React.FC<{ data: SlideData; narration?: string }>,
+  homepageGBP:           LocalBusinessScene as React.FC<{ data: SlideData; narration?: string }>,
+  homepageFinalSummary:  FinalSummaryScene  as React.FC<{ data: SlideData; narration?: string }>,
 };
 
-// Per-sequence fade-out wrapper — reads local frame inside each Sequence
 const SceneFadeWrapper: React.FC<{ durationInFrames: number; children: React.ReactNode }> = ({
   durationInFrames,
   children,
@@ -56,7 +49,7 @@ export const HomepageAuditVideo: React.FC<HomepageAuditVideoProps> = ({
   fps: propsFps,
 }) => {
   const { fps: configFps } = useVideoConfig();
-  const fps = propsFps ?? configFps ?? 30;
+  const fps = propsFps ?? configFps ?? 24;
   const frame = useCurrentFrame();
 
   const timings = useMemo(() => buildSlideTiming(slidesWithAudio, fps), [slidesWithAudio, fps]);
@@ -71,7 +64,7 @@ export const HomepageAuditVideo: React.FC<HomepageAuditVideoProps> = ({
 
   if (slidesWithAudio.length === 0) {
     return (
-      <AbsoluteFill style={{ background, color: "#F0F0FF", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", fontFamily: "Inter, DM Sans, system-ui, sans-serif" }}>
+      <AbsoluteFill style={{ background: "#0A0A0F", color: "#F0F0FF", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", fontFamily: "Inter, system-ui, sans-serif" }}>
         <div style={{ fontSize: 40, fontWeight: 700, marginBottom: 16 }}>No slides available</div>
         <div style={{ fontSize: 20, opacity: 0.4 }}>Waiting for homepage audit slide data…</div>
       </AbsoluteFill>
@@ -79,12 +72,12 @@ export const HomepageAuditVideo: React.FC<HomepageAuditVideoProps> = ({
   }
 
   return (
-    <AbsoluteFill style={{ background, opacity: globalOpacity }}>
+    <AbsoluteFill style={{ background: "#0A0A0F", opacity: globalOpacity }}>
       {timings.map((timing) => {
         const { slide, from, durationInFrames, index } = timing;
         const Scene = SCENE_MAP[slide.type];
         if (!Scene) {
-          console.warn(`[HomepageAuditVideo] Unknown slide type: "${slide.type}"`);
+          console.warn(`[HomepageAuditVideo] No V2 scene registered for type: "${slide.type}"`);
           return null;
         }
         return (

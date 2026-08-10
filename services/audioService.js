@@ -36,8 +36,8 @@ class AudioService {
     this.MAX_RETRIES = 3;
     this.RETRY_DELAY_BASE = 1000; // 1 second base delay
     this.RATE_LIMIT_DELAY = 2000; // 2 seconds between requests
-    // CRITICAL: Disable silent audio fallback - we want real voice only
-    this.FALLBACK_ENABLED = false;
+    // Enable OpenAI TTS fallback when ElevenLabs quota is exhausted
+    this.FALLBACK_ENABLED = true;
     
     // Rate limiting
     this.lastRequestTime = 0;
@@ -121,8 +121,11 @@ class AudioService {
       } catch (elevenLabsError) {
         console.error(`[AUDIO_SERVICE] ❌ ElevenLabs failed: ${elevenLabsError.message}`);
         
-        // CRITICAL: Check if this is an authentication error
-        if (elevenLabsError.message?.includes('401') || elevenLabsError.message?.includes('authentication')) {
+        // Only hard-throw on 401 if it's a genuine API key failure, not quota exhaustion.
+        // Quota-exceeded errors also arrive as 401 from ElevenLabs — those should fall through to OpenAI.
+        const isQuotaExhausted = elevenLabsError.message?.includes('quota');
+        const isAuthFailure = (elevenLabsError.message?.includes('401') || elevenLabsError.message?.includes('authentication')) && !isQuotaExhausted;
+        if (isAuthFailure) {
           throw new Error(`❌ ElevenLabs authentication failed. Please check your API key: ${elevenLabsError.message}`);
         }
         

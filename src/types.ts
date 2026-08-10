@@ -1,4 +1,3 @@
-// Type definitions for new components
 export interface SlideNarration {
   title: string;
   voice_over: string;
@@ -75,21 +74,9 @@ export interface TechnicalData {
 
 export interface KeywordData {
   totalKeywords: number;
-  topRankings: Array<{
-    keyword: string;
-    rank: number;
-    status: string;
-  }>;
-  opportunities: Array<{
-    keyword: string;
-    rank: number;
-    status: string;
-  }>;
-  notRanking: Array<{
-    keyword: string;
-    rank: number | null;
-    status: string;
-  }>;
+  topRankings: Array<{ keyword: string; rank: number; status: string }>;
+  opportunities: Array<{ keyword: string; rank: number; status: string }>;
+  notRanking: Array<{ keyword: string; rank: number | null; status: string }>;
 }
 
 export interface AIVisibilityData {
@@ -104,16 +91,8 @@ export interface AIVisibilityData {
   ai_snippet_probability: number;
   ai_citation_rate: number;
   kg_status: "linked" | "partial" | "missing";
-  llm_citations: Array<{
-    platform: string;
-    count: number;
-    growth: number;
-  }>;
-  entity_map: Array<{
-    entity: string;
-    status: "linked" | "partial" | "missing";
-    confidence: number;
-  }>;
+  llm_citations: Array<{ platform: string; count: number; growth: number }>;
+  entity_map: Array<{ entity: string; status: "linked" | "partial" | "missing"; confidence: number }>;
 }
 
 export interface FinalRecommendationData {
@@ -128,8 +107,5 @@ export interface FinalRecommendationData {
     impact: string;
     timeframe: string;
   }>;
-  next_steps: Array<{
-    step: string;
-    status: string;
-  }>;
+  next_steps: Array<{ step: string; status: string }>;
 }

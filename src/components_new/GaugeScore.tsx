@@ -1,126 +1,102 @@
-// remotion/components/GaugeScore.tsx
 import React from "react";
-import { interpolate, useCurrentFrame } from "remotion";
 
 interface GaugeScoreProps {
   score: number;
-  label: string;
   size?: number;
+  label?: string;
   color?: string;
-  startFrame?: number;
+  showLabel?: boolean;
+  style?: React.CSSProperties;
+}
+
+function scoreColor(score: number): string {
+  if (score >= 80) return "#10b981";
+  if (score >= 50) return "#f59e0b";
+  return "#ef4444";
 }
 
 export const GaugeScore: React.FC<GaugeScoreProps> = ({
   score,
+  size = 120,
   label,
-  size = 200,
-  startFrame = 10,
+  color,
+  showLabel = true,
+  style,
 }) => {
-  const frame = useCurrentFrame();
-
-  const animatedScore = Math.round(
-    interpolate(frame, [startFrame, startFrame + 50], [0, Number(score) || 0], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    })
-  );
-
-  const strokeColor =
-    score >= 80 ? "#00f5a0" : score >= 60 ? "#ffb703" : "#ff3860";
-
+  const clampedScore = Math.max(0, Math.min(100, score ?? 0));
+  const resolvedColor = color ?? scoreColor(clampedScore);
   const r = (size / 2) * 0.78;
-  const circumference = 2 * Math.PI * r;
-  const animatedDash = interpolate(
-    frame,
-    [startFrame, startFrame + 50],
-    [0, ((Number(score) || 0) / 100) * circumference],
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
-  );
-
-  const opacity = interpolate(frame, [startFrame - 5, startFrame + 5], [0, 1], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  const cx = size / 2;
+  const cy = size / 2;
+  const circumference = Math.PI * r;
+  const dashOffset = circumference * (1 - clampedScore / 100);
 
   return (
-    <div style={{ position: "relative", width: size, height: size, opacity }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Background ring */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 6,
+        ...style,
+      }}
+    >
+      <svg width={size} height={size * 0.6} viewBox={`0 0 ${size} ${size * 0.6}`}>
+        {/* Background arc */}
+        <path
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(255,255,255,0.08)"
           strokeWidth={size * 0.07}
+          strokeLinecap="round"
         />
-        {/* Animated score ring */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
+        {/* Score arc */}
+        <path
+          d={`M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}`}
           fill="none"
-          stroke={strokeColor}
+          stroke={resolvedColor}
           strokeWidth={size * 0.07}
           strokeLinecap="round"
           strokeDasharray={circumference}
-          strokeDashoffset={circumference - animatedDash}
-          transform={`rotate(-90 ${size / 2} ${size / 2})`}
-          style={{
-            filter: `drop-shadow(0 0 ${size * 0.06}px ${strokeColor}80)`,
-          }}
+          strokeDashoffset={dashOffset}
+          style={{ transition: "stroke-dashoffset 0.6s ease" }}
         />
+        {/* Score text */}
+        <text
+          x={cx}
+          y={cy - 4}
+          textAnchor="middle"
+          fill="#f0f4ff"
+          fontSize={size * 0.22}
+          fontWeight="700"
+          fontFamily="Inter, system-ui, sans-serif"
+        >
+          {Math.round(clampedScore)}
+        </text>
+        <text
+          x={cx}
+          y={cy + size * 0.12}
+          textAnchor="middle"
+          fill="#6b7a9e"
+          fontSize={size * 0.1}
+          fontFamily="Inter, system-ui, sans-serif"
+        >
+          / 100
+        </text>
       </svg>
-      {/* Score text */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span
+      {showLabel && label && (
+        <div
           style={{
-            fontFamily: "sans-serif",
-            fontWeight: 800,
-            fontSize: size * 0.28,
-            color: strokeColor,
-            lineHeight: 1,
-            letterSpacing: "-0.03em",
-          }}
-        >
-          {animatedScore}
-        </span>
-        <span
-          style={{
-            fontFamily: "sans-serif",
-            fontSize: size * 0.09,
-            color: "rgba(255,255,255,0.4)",
-            marginTop: size * 0.03,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-          }}
-        >
-          /100
-        </span>
-        <span
-          style={{
-            fontFamily: "sans-serif",
-            fontSize: size * 0.08,
-            color: "rgba(255,255,255,0.5)",
-            marginTop: size * 0.02,
+            fontFamily: "Inter, system-ui, sans-serif",
+            fontSize: size * 0.11,
+            color: "#6b7a9e",
+            fontWeight: 500,
             textAlign: "center",
-            maxWidth: size * 0.7,
-            textTransform: "uppercase",
-            letterSpacing: "0.06em",
           }}
         >
           {label}
-        </span>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

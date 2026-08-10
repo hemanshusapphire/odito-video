@@ -28,8 +28,13 @@ class VideoWorker {
 
     this.audioService = new AudioService();
 
-    // Backend public path — identical detection logic as before
-    if (process.env.BACKEND_PUBLIC_PATH) {
+    // Sibling detection first (dynamic and location-independent)
+    const dynamicBackendPublicPath = path.resolve(__dirname, '../odito_backend/public');
+    
+    if (fs.existsSync(dynamicBackendPublicPath)) {
+      this.backendPublicPath = dynamicBackendPublicPath;
+      console.log(`[VIDEO_WORKER] ✅ Dynamically resolved backend public path (sibling): ${this.backendPublicPath}`);
+    } else if (process.env.BACKEND_PUBLIC_PATH) {
       this.backendPublicPath = process.env.BACKEND_PUBLIC_PATH;
       console.log(`[VIDEO_WORKER] Backend public path from ENV: ${this.backendPublicPath}`);
     } else {

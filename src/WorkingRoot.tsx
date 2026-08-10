@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { AuditVideo as WorkingVideo } from "./WorkingVideo";
 import { HomepageAuditVideo } from "./homepage-audit/HomepageAuditVideo";
+import { buildSlideTiming, totalFrames } from "./lib/utils";
 // import { TOTAL_DURATION_FRAMES } from "./utils/timingUtils"; // DEPRECATED - Use dynamic duration
 import { loadFont as loadSyne } from "@remotion/google-fonts/Syne";
 import { loadFont as loadJetBrains } from "@remotion/google-fonts/JetBrainsMono";
@@ -48,10 +49,23 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="HomepageAuditVideo"
         component={HomepageAuditVideo}
-        durationInFrames={2460}
         fps={24}
         width={1920}
         height={1080}
+        calculateMetadata={({ props }) => {
+          const slides = props.slidesWithAudio || [];
+          const fps = props.fps || 24;
+          if (slides.length === 0) {
+            return {
+              durationInFrames: 2460,
+            };
+          }
+          const timings = buildSlideTiming(slides, fps);
+          const duration = totalFrames(timings);
+          return {
+            durationInFrames: duration || 2460,
+          };
+        }}
         defaultProps={{
           slidesWithAudio: [],
           fps: 24,

@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongodb');
+﻿const { ObjectId } = require('mongodb');
 const jobService = require('../shared/jobService');
 const renderService = require('../shared/renderService');
 const audioOrchestrator = require('../shared/audioOrchestrator');
@@ -88,8 +88,8 @@ async function _processWithRetry(jobId, projectId, auditSnapshot, audioService, 
       if (!structuredSlides || structuredSlides.length === 0) {
         throw new Error('Slides generation failed - no slides created');
       }
-      if (structuredSlides.length < 13) {
-        throw new Error(`Minimum 13 slides required. Got ${structuredSlides?.length || 0} slides`);
+      if (structuredSlides.length < 15) {
+        throw new Error(`Minimum 15 slides required. Got ${structuredSlides?.length || 0} slides`);
       }
 
       console.log(`[FULL_AUDIT_PROCESSOR] ✅ Created ${structuredSlides.length} structured slides`);
@@ -161,8 +161,6 @@ async function _processWithRetry(jobId, projectId, auditSnapshot, audioService, 
         audioFilesGenerated: audioFiles.length,
         providerUsed: 'per_slide_audio_generation',
         slideBreakdown: {
-          originalSlides: 9,
-          newAiSlides: 3,
           totalSlides: structuredSlides.length
         }
       };
@@ -248,11 +246,16 @@ function generateStructuredSlides(audit) {
     console.log(`[FULL_AUDIT_PROCESSOR]   Medium issues: ${issueDistribution.medium || 0}`);
     console.log(`[FULL_AUDIT_PROCESSOR]   Low issues: ${issueDistribution.low || 0}`);
 
+    const generatedAt = audit.metadata?.generatedAt;
+    const auditDate = generatedAt
+      ? new Date(generatedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+      : new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const description = `A comprehensive AI visibility and SEO audit of ${projectName}.`;
+
     const technicalHighlights = audit?.technicalHighlights || {};
     const performanceMetrics = audit?.performanceMetrics || {};
     const coreWebVitals = narration.extractCoreWebVitals(performanceMetrics);
     const keywordData = audit?.keywordData || {};
-    const aiAnalysis = audit?.aiAnalysis || {};
 
     console.log(`[FULL_AUDIT_PROCESSOR] 📊 Keyword data extracted:`, {
       totalKeywords: keywordData.totalKeywords || 0,
@@ -318,14 +321,16 @@ function generateStructuredSlides(audit) {
       return n;
     }
 
+    const hub = audit.aiHubSnapshot || null;
+
     const slides = [
       {
         id: 1,
-        type: 'projectOverview',
+        type: 'cover',
         title: projectName,
         subtitle: url,
         narration: `${projectName} scores ${scores.overall || 0} out of 100 — not because the business isn't good, but because the website isn't communicating that to search engines. Let's break down exactly why.`,
-        data: { projectName, url, pagesCrawled, scores, issueDistribution }
+        data: { projectName, url, pagesCrawled, scores, issueDistribution, auditDate, description }
       },
       {
         id: 2,
@@ -389,6 +394,38 @@ function generateStructuredSlides(audit) {
       },
       {
         id: 8,
+        type: 'aiVisibilityOverview',
+        title: 'AI Visibility Overview',
+        subtitle: hub ? `AI Score: ${hub.overallScore}/100` : 'AI Visibility Analysis',
+        narration: narration.generateAIVisibilityOverviewNarration(hub),
+        data: { aiHubSnapshot: hub }
+      },
+      {
+        id: 9,
+        type: 'aisoHub',
+        title: 'AI Search Optimization',
+        subtitle: hub ? `AISO Score: ${hub.aiso?.score ?? 0}/100` : 'AISO Analysis',
+        narration: narration.generateAISONarration(hub?.aiso ?? null),
+        data: { aiso: hub?.aiso ?? null }
+      },
+      {
+        id: 10,
+        type: 'aeoHub',
+        title: 'Answer Engine Optimization',
+        subtitle: hub ? `AEO Score: ${hub.aeo?.score ?? 0}/100` : 'AEO Analysis',
+        narration: narration.generateAEONarration(hub?.aeo ?? null),
+        data: { aeo: hub?.aeo ?? null }
+      },
+      {
+        id: 11,
+        type: 'geoHub',
+        title: 'Generative Engine Optimization',
+        subtitle: hub ? `GEO Score: ${hub.geo?.score ?? 0}/100` : 'GEO Analysis',
+        narration: narration.generateGEONarration(hub?.geo ?? null),
+        data: { geo: hub?.geo ?? null }
+      },
+      {
+        id: 12,
         type: 'performanceSummary',
         title: 'Performance Summary',
         subtitle: `Performance Score: ${performanceMetrics.pageSpeed || 0}`,
@@ -427,7 +464,7 @@ function generateStructuredSlides(audit) {
         }
       },
       {
-        id: 9,
+        id: 13,
         type: 'coreWebVitals',
         title: 'Core Web Vitals',
         subtitle: 'User Experience Metrics',
@@ -435,7 +472,7 @@ function generateStructuredSlides(audit) {
         data: coreWebVitals
       },
       {
-        id: 10,
+        id: 14,
         type: 'keywords',
         title: 'Keyword Performance',
         subtitle: `${keywordData.totalKeywords || 0} Keywords Tracked`,
@@ -443,8 +480,6 @@ function generateStructuredSlides(audit) {
         data: keywordData
       }
     ];
-
-    const newAiSlides = generateAISlides(aiAnalysis, scores);
 
     const slide14 = {
       id: 15,
@@ -461,10 +496,10 @@ function generateStructuredSlides(audit) {
       }
     };
 
-    const allSlides = [...slides, ...newAiSlides, slide14];
+    const allSlides = [...slides, slide14];
 
-    if (allSlides.length < 14) {
-      throw new Error(`Minimum 14 slides required. Got ${allSlides.length}`);
+    if (allSlides.length < 15) {
+      throw new Error(`Minimum 15 slides required. Got ${allSlides.length}`);
     }
 
     allSlides.forEach((slide, index) => {
@@ -478,147 +513,6 @@ function generateStructuredSlides(audit) {
 
   } catch (error) {
     console.error(`[FULL_AUDIT_PROCESSOR] ❌ Error generating structured slides:`, error);
-    throw error;
-  }
-}
-
-/**
- * Generate 4 AI Analysis slides (10–13) from aiAnalysis data.
- * Extracted verbatim from VideoWorker.generateAISlides() — zero logic changes.
- */
-function generateAISlides(aiAnalysis, scores) {
-  try {
-    console.log(`[FULL_AUDIT_PROCESSOR] 🤖 Generating AI Analysis slides from aiAnalysis data`);
-
-    if (!aiAnalysis || typeof aiAnalysis !== 'object') {
-      console.warn(`[FULL_AUDIT_PROCESSOR] ⚠️ aiAnalysis data missing or invalid, using fallback values`);
-      aiAnalysis = { score: 0, summary: 'AI analysis data unavailable', hasKnowledgeGraph: false, categories: {}, detailedMetrics: {}, checklist: [] };
-    }
-
-    const categories = aiAnalysis.categories || {};
-    const detailedMetrics = aiAnalysis.detailedMetrics || {};
-    const checklist = aiAnalysis.checklist || [];
-
-    const slide10 = {
-      id: 10,
-      type: 'aiAnalysis',
-      title: 'AI Analysis Overview',
-      subtitle: 'AI Search Readiness Summary',
-      narration: `And now the most important score in today's world — AI Visibility. ChatGPT, Claude, Perplexity, AI search overviews — these are the new search engines. People aren't just searching online anymore, they're asking AI. And AI decides who to mention, who to recommend, who to trust. Your score is ${scores.aiVisibility || 0} — meaning right now, you're largely invisible in that conversation. This is the score that will define the next 5 years of your online presence.`,
-      data: {
-        score: scores.aiVisibility || 0,
-        summary: aiAnalysis.summary || 'AI analysis data unavailable',
-        hasKnowledgeGraph: aiAnalysis.hasKnowledgeGraph || false
-      }
-    };
-
-    const slide11 = {
-      id: 11,
-      type: 'aiCategoryBreakdown',
-      title: 'AI Category Breakdown',
-      subtitle: 'AI Performance Distribution',
-      narration: (() => {
-        const aiImpact = categories.aiImpact || 0;
-        const citationProbability = categories.citationProbability || 0;
-        const llmReadiness = categories.llmReadiness || 0;
-        const aeoScore = categories.aeoScore || 0;
-        const topicalAuthority = categories.topicalAuthority || 0;
-        const voiceIntent = categories.voiceIntent || 0;
-        const getStatus = s => s >= 75 ? 'strong' : s >= 50 ? 'moderate' : 'weak';
-        const allCats = [
-          { name: 'AI Impact', score: aiImpact },
-          { name: 'Citation Probability', score: citationProbability },
-          { name: 'LLM Readiness', score: llmReadiness },
-          { name: 'AEO Score', score: aeoScore },
-          { name: 'Topical Authority', score: topicalAuthority },
-          { name: 'Voice Intent', score: voiceIntent }
-        ];
-        const groups = { strong: [], moderate: [], weak: [] };
-        allCats.forEach(c => groups[getStatus(c.score)].push(c));
-        let n = 'Your AI performance shows a mixed distribution across key areas. ';
-        if (groups.strong.length > 0) n += `${groups.strong.map(c => `${c.name} at ${c.score}`).join(' and ')} ${groups.strong.length === 1 ? 'is' : 'are'} performing strongly. `;
-        if (groups.moderate.length > 0) n += `${groups.moderate.map(c => `${c.name} at ${c.score}`).join(' and ')} ${groups.moderate.length === 1 ? 'shows' : 'show'} moderate performance. `;
-        if (groups.weak.length > 0) n += `${groups.weak.map(c => `${c.name} at ${c.score}`).join(' and ')} ${groups.weak.length === 1 ? 'is' : 'are'} underperforming and need attention. `;
-        if (groups.weak.length >= 3) n += 'This indicates low AI readiness requiring comprehensive optimization.';
-        else if (groups.weak.length >= 1) n += 'Improving these areas will strengthen your AI visibility and authority.';
-        else n += 'You demonstrate strong AI optimization across all key areas.';
-        return n;
-      })(),
-      data: {
-        categories: {
-          aiImpact: categories.aiImpact || 0,
-          citationProbability: categories.citationProbability || 0,
-          llmReadiness: categories.llmReadiness || 0,
-          aeoScore: categories.aeoScore || 0,
-          topicalAuthority: categories.topicalAuthority || 0,
-          voiceIntent: categories.voiceIntent || 0
-        }
-      }
-    };
-
-    const slide12 = {
-      id: 12,
-      type: 'aiDetailedMetrics',
-      title: 'AI Detailed Metrics',
-      subtitle: 'Technical AI Readiness',
-      narration: (() => {
-        const m = {
-          schemaCoverage: detailedMetrics.schemaCoverage || 0,
-          faqOptimization: detailedMetrics.faqOptimization || 0,
-          conversationalScore: detailedMetrics.conversationalScore || 0,
-          aiSnippetProbability: detailedMetrics.aiSnippetProbability || 0,
-          aiCitationRate: detailedMetrics.aiCitationRate || 0,
-          knowledgeGraph: detailedMetrics.knowledgeGraph || 0
-        };
-        const getStatus = s => s >= 75 ? 'strong' : s >= 50 ? 'moderate' : 'weak';
-        const allMetrics = [
-          { name: 'Schema Coverage', score: m.schemaCoverage },
-          { name: 'FAQ Optimization', score: m.faqOptimization },
-          { name: 'Conversational Score', score: m.conversationalScore },
-          { name: 'AI Snippet Probability', score: m.aiSnippetProbability },
-          { name: 'AI Citation Rate', score: m.aiCitationRate },
-          { name: 'Knowledge Graph', score: m.knowledgeGraph }
-        ];
-        const groups = { strong: [], moderate: [], weak: [] };
-        allMetrics.forEach(met => groups[getStatus(met.score)].push(met));
-        let n = 'Your technical AI readiness shows varied performance across key metrics. ';
-        if (groups.strong.length > 0) n += `${groups.strong.map(met => `${met.name} at ${met.score}`).join(' and ')} ${groups.strong.length === 1 ? 'is' : 'are'} performing strongly. `;
-        if (groups.moderate.length > 0) n += `${groups.moderate.map(met => `${met.name} at ${met.score}`).join(' and ')} ${groups.moderate.length === 1 ? 'shows' : 'show'} moderate performance. `;
-        if (groups.weak.length > 0) n += `${groups.weak.map(met => `${met.name} at ${met.score}`).join(' and ')} ${groups.weak.length === 1 ? 'needs' : 'need'} improvement. `;
-        if (groups.weak.length >= 3) n += 'This indicates low AI visibility requiring comprehensive optimization.';
-        else if (groups.weak.length >= 1) n += 'Addressing these areas presents an opportunity to enhance your AI search presence.';
-        else n += 'You demonstrate strong AI readiness across all technical metrics.';
-        return n;
-      })(),
-      data: {
-        detailedMetrics: {
-          schemaCoverage: detailedMetrics.schemaCoverage || 0,
-          faqOptimization: detailedMetrics.faqOptimization || 0,
-          conversationalScore: detailedMetrics.conversationalScore || 0,
-          aiSnippetProbability: detailedMetrics.aiSnippetProbability || 0,
-          aiCitationRate: detailedMetrics.aiCitationRate || 0,
-          knowledgeGraph: detailedMetrics.knowledgeGraph || 0
-        }
-      }
-    };
-
-    const slide13 = {
-      id: 13,
-      type: 'aiTopIssues',
-      title: 'AI Top Issues',
-      subtitle: 'Critical AI Optimization Areas',
-      narration: 'The root cause is clear — AI systems do not understand your entity properly. They don\'t know who you are, what you do, or who you serve. Fixing your entity clarity can significantly improve your AI visibility score.',
-      data: { topIssues: narration.extractTopIssues(checklist) }
-    };
-
-    const aiSlides = [slide10, slide11, slide12, slide13];
-    console.log(`[FULL_AUDIT_PROCESSOR] ✅ Generated ${aiSlides.length} AI Analysis slides (slides 10-13)`);
-    aiSlides.forEach(slide => console.log(`[FULL_AUDIT_PROCESSOR]   AI Slide ${slide.id}: ${slide.title} (${slide.type})`));
-
-    return aiSlides;
-
-  } catch (error) {
-    console.error(`[FULL_AUDIT_PROCESSOR] ❌ Error generating AI slides:`, error);
     throw error;
   }
 }

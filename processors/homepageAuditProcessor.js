@@ -13,6 +13,17 @@ const narration = require('../narrations/homepageAuditNarration');
  *
  * Phase 2: validates + prepares payload
  * Phase 4: completes audio + render
+ *
+ * v3 changes:
+ *   - _buildSlides now emits 11 slides (added homepageOverallScore at position 2)
+ *   - All narration indices shifted +1 to accommodate new slide
+ *   - Fixed all field-name mismatches between adapter output and scene data contracts
+ *   - Performance slide now passes mobile/desktop sub-objects (was flat mobileScore/desktopScore)
+ *   - Accessibility slide passes criticalViolations, missingLabels + bar percentages
+ *   - Social slide passes connectedProfiles/missingProfiles (was connectedCount/missingCount)
+ *   - GBP slide passes verified + businessHours (P3)
+ *   - AI slide passes readabilityScore (was llmScore) + issues[] from P2 transform
+ *   - Final Summary slide passes issuesFound, opportunitiesFound, opportunities[]
  */
 
 const COMPOSITION_ID = 'HomepageAuditVideo';
@@ -77,12 +88,12 @@ async function _processWithRetry(jobId, auditId, auditSnapshot, audioService, co
         currentStep: 'Generating narration script'
       });
 
-      // Step 2: Generate narration (10 sections, one per slide)
+      // Step 2: Generate narration (11 sections, one per slide)
       console.log(`[HOMEPAGE_AUDIT_PROCESSOR] Generating narration script...`);
       const narrationSections = narration.generateScript(videoProps);
       console.log(`[HOMEPAGE_AUDIT_PROCESSOR] ✅ Generated ${narrationSections.length} narration sections`);
 
-      // Step 3: Build 10 slides
+      // Step 3: Build 11 slides
       console.log(`[HOMEPAGE_AUDIT_PROCESSOR] Building slides...`);
       const structuredSlides = _buildSlides(videoProps, narrationSections);
       console.log(`[HOMEPAGE_AUDIT_PROCESSOR] ✅ Created ${structuredSlides.length} slides`);
@@ -179,11 +190,26 @@ async function _processWithRetry(jobId, auditId, auditSnapshot, audioService, co
 }
 
 /**
- * Build 10 structured slides from adapted video props + narration sections.
- * One slide per script section: Intro → OnPage → Technical → Security →
- * AIVisibility → Performance → Accessibility → Social → GBP → FinalSummary.
+ * Build 11 structured slides from adapted video props + narration sections.
+ *
+ * Slide order:
+ *   1  homepageIntro          → narrationSections[0]
+ *   2  homepageOverallScore   → narrationSections[1]   ← NEW
+ *   3  homepageOnPage         → narrationSections[2]
+ *   4  homepageTechnical      → narrationSections[3]
+ *   5  homepageSecurity       → narrationSections[4]
+ *   6  homepageAIVisibility   → narrationSections[5]
+ *   7  homepagePerformance    → narrationSections[6]
+ *   8  homepageAccessibility  → narrationSections[7]
+ *   9  homepageSocialSignals  → narrationSections[8]
+ *   10 homepageGBP            → narrationSections[9]
+ *   11 homepageFinalSummary   → narrationSections[10]
  */
 function _buildSlides(props, narrationSections) {
+  const a11yIssueCount    = props.accessibility.issueCount    || 0;
+  const a11yCriticalCount = props.accessibility.criticalCount || 0;
+  const missingLabels     = props.missingLabels               || 0;
+
   return [
     // ── 1. Intro ─────────────────────────────────────────────────────────────
     {
@@ -193,148 +219,182 @@ function _buildSlides(props, narrationSections) {
       subtitle: props.url,
       narration: narrationSections[0],
       data: {
-        url:            props.url,
+        websiteUrl:     props.url,               // FIXED: was 'url'
         projectName:    props.projectName,
         audited_at:     props.audited_at,
         overallScore:   props.scores.overall,
-        totalIssues:    props.issueDistribution.total,
+        issuesFound:    props.issueDistribution.total,     // FIXED: was 'totalIssues'
         criticalIssues: props.issueDistribution.critical,
         warningIssues:  props.issueDistribution.warnings,
       },
     },
 
-    // ── 2. On-Page SEO ────────────────────────────────────────────────────────
+    // ── 2. Overall Health Score ───────────────────────────────────────────────
     {
       id: 2,
+      type: 'homepageOverallScore',
+      title: 'Overall Score',
+      subtitle: `Score: ${props.scores.overall}`,
+      narration: narrationSections[1],
+      data: {
+        score:          props.scores.overall,
+        maxScore:       100,
+        totalIssues:    props.issueDistribution.total,
+        criticalIssues: props.issueDistribution.critical,
+        warningIssues:  props.issueDistribution.warnings,
+        passedChecks:   props.issueDistribution.passed,
+      },
+    },
+
+    // ── 3. On-Page SEO ────────────────────────────────────────────────────────
+    {
+      id: 3,
       type: 'homepageOnPage',
       title: 'On-Page SEO',
       subtitle: `Score: ${props.scores.seo}`,
-      narration: narrationSections[1],
+      narration: narrationSections[2],
       data: {
-        sectionName:  'On-Page SEO',
         score:        props.scores.seo,
-        issueCount:   props.onPage.issueCount,
+        totalIssues:  props.onPage.issueCount,      // FIXED: was 'issueCount'
         checksCount:  props.onPage.checksCount,
-        accentColor:  '#3b82f6',   // blue
+        findings:     props.onPageFindings,         // P2: transformed check objects
       },
     },
 
-    // ── 3. Technical SEO ──────────────────────────────────────────────────────
+    // ── 4. Technical SEO ──────────────────────────────────────────────────────
     {
-      id: 3,
+      id: 4,
       type: 'homepageTechnical',
       title: 'Technical SEO',
       subtitle: `Score: ${props.scores.technicalHealth}`,
-      narration: narrationSections[2],
+      narration: narrationSections[3],
       data: {
-        sectionName:  'Technical SEO',
         score:        props.scores.technicalHealth,
-        issueCount:   props.technical.issueCount,
+        issuesFound:  props.technical.issueCount,                                          // FIXED: was 'issueCount'
+        checksPassed: Math.max(0, props.technical.checksCount - props.technical.issueCount), // FIXED: was 'checksCount'
         checksCount:  props.technical.checksCount,
-        accentColor:  '#06b6d4',   // cyan
+        findings:     props.technicalFindings,    // P2: transformed check objects
       },
     },
 
-    // ── 4. Security ───────────────────────────────────────────────────────────
+    // ── 5. Security ───────────────────────────────────────────────────────────
     {
-      id: 4,
+      id: 5,
       type: 'homepageSecurity',
       title: 'Security',
       subtitle: `Score: ${props.scores.security}`,
-      narration: narrationSections[3],
+      narration: narrationSections[4],
       data: {
-        sectionName:   'Security',
-        score:         props.scores.security,
-        issueCount:    props.security.issueCount,
-        criticalCount: props.security.criticalCount,
-        checksCount:   null,
-        accentColor:   '#ef4444',  // red
+        score:          props.scores.security,
+        securityIssues: props.security.issueCount,   // FIXED: was 'issueCount'
+        criticalCount:  props.security.criticalCount,
+        issues:         props.securityIssues,        // P2: transformed check objects
       },
     },
 
-    // ── 5. AI Visibility ──────────────────────────────────────────────────────
+    // ── 6. AI Visibility ──────────────────────────────────────────────────────
     {
-      id: 5,
+      id: 6,
       type: 'homepageAIVisibility',
       title: 'AI Visibility',
       subtitle: `Score: ${props.scores.aiVisibility}`,
-      narration: narrationSections[4],
+      narration: narrationSections[5],
       data: {
-        score:         props.scores.aiVisibility,
-        issueCount:    props.aiVisibility.issueCount,
-        criticalCount: props.aiVisibility.criticalCount,
-        llmScore:      props.aiVisibility.llmScore,
-        aiChecks:      props.aiChecks,
+        score:            props.scores.aiVisibility,
+        issueCount:       props.aiVisibility.issueCount,
+        criticalCount:    props.aiVisibility.criticalCount,
+        readabilityScore: props.aiVisibility.llmScore,  // FIXED: was 'llmScore'
+        issues:           props.aiIssues,               // P2: transformed (was 'aiChecks' w/ wrong shape)
       },
     },
 
-    // ── 6. Performance ────────────────────────────────────────────────────────
+    // ── 7. Performance ────────────────────────────────────────────────────────
     {
-      id: 6,
+      id: 7,
       type: 'homepagePerformance',
       title: 'Performance',
       subtitle: `Score: ${props.scores.performance}`,
-      narration: narrationSections[5],
+      narration: narrationSections[6],
       data: {
         score:        props.scores.performance,
-        mobileScore:  props.performanceMetrics.mobileScore,
-        desktopScore: props.performanceMetrics.desktopScore,
+        mobile:       props.mobilePerfMetrics,    // FIXED: was flat 'mobileScore'
+        desktop:      props.desktopPerfMetrics,   // FIXED: was flat 'desktopScore'
         responseTime: props.performance.responseTime,
         issueCount:   props.performance.issueCount,
       },
     },
 
-    // ── 7. Accessibility ──────────────────────────────────────────────────────
+    // ── 8. Accessibility ──────────────────────────────────────────────────────
     {
-      id: 7,
+      id: 8,
       type: 'homepageAccessibility',
       title: 'Accessibility',
       subtitle: `Score: ${props.scores.accessibility}`,
-      narration: narrationSections[6],
+      narration: narrationSections[7],
       data: {
-        sectionName:   'Accessibility',
-        score:         props.scores.accessibility,
-        issueCount:    props.accessibility.issueCount,
-        criticalCount: props.accessibility.criticalCount,
-        checksCount:   null,
-        accentColor:   '#10b981',  // green
+        score:                   props.scores.accessibility,
+        criticalViolations:      a11yCriticalCount,                                           // FIXED: was 'criticalCount'
+        criticalViolationsBarPct: Math.min(100, Math.round(
+          (a11yCriticalCount / Math.max(1, a11yIssueCount)) * 100
+        )),
+        missingLabels,                                                                        // NEW: derived from label-related checks
+        missingLabelsBarPct: Math.min(100, Math.round(
+          (missingLabels / Math.max(1, a11yIssueCount)) * 100
+        )),
+        issues: props.accessibilityIssues,  // P2: transformed check objects
       },
     },
 
-    // ── 8. Social Signals ─────────────────────────────────────────────────────
+    // ── 9. Social Signals ─────────────────────────────────────────────────────
     {
-      id: 8,
+      id: 9,
       type: 'homepageSocialSignals',
       title: 'Social Signals',
       subtitle: `${props.social.connectedCount} Connected`,
-      narration: narrationSections[7],
+      narration: narrationSections[8],
       data: {
-        connectedCount: props.social.connectedCount,
-        missingCount:   props.social.missingCount,
-        platforms:      props.social.platforms,
+        score:             props.social.score,
+        connectedProfiles: props.social.connectedCount,  // FIXED: was 'connectedCount'
+        missingProfiles:   props.social.missingCount,    // FIXED: was 'missingCount'
+        platforms:         props.social.platforms,       // P4: each item now has { platform, name, connected }
       },
     },
 
-    // ── 9. Google Business Presence ───────────────────────────────────────────
+    // ── 10. Google Business Presence ──────────────────────────────────────────
     {
-      id: 9,
+      id: 10,
       type: 'homepageGBP',
       title: 'Google Business Presence',
       subtitle: props.googleBusinessPresence.found ? 'Profile Found' : 'Profile Not Found',
-      narration: narrationSections[8],
-      data: props.googleBusinessPresence,
+      narration: narrationSections[9],
+      data: {
+        found:         props.googleBusinessPresence.found,
+        verified:      props.googleBusinessPresence.verified,      // P3: was missing
+        businessName:  props.googleBusinessPresence.businessName,
+        category:      props.googleBusinessPresence.category,
+        rating:        props.googleBusinessPresence.rating,
+        reviewCount:   props.googleBusinessPresence.reviewCount,
+        address:       props.googleBusinessPresence.address,
+        phone:         props.googleBusinessPresence.phone,
+        website:       props.googleBusinessPresence.website,
+        businessHours: props.googleBusinessPresence.businessHours, // P3: was missing
+        mapsUrl:       props.googleBusinessPresence.mapsUrl,
+        status:        props.googleBusinessPresence.status,
+      },
     },
 
-    // ── 10. Final Summary ─────────────────────────────────────────────────────
+    // ── 11. Final Summary ─────────────────────────────────────────────────────
     {
-      id: 10,
+      id: 11,
       type: 'homepageFinalSummary',
       title: 'Final Summary',
       subtitle: 'Key Opportunities',
-      narration: narrationSections[9],
+      narration: narrationSections[10],
       data: {
-        overallScore: props.scores.overall,
-        topIssues:    props.topIssues4,
+        overallScore:       props.scores.overall,
+        issuesFound:        props.issueDistribution.total,    // NEW
+        opportunitiesFound: props.issueDistribution.warnings, // NEW (warnings = optimization opportunities)
+        opportunities:      props.opportunities,              // NEW: FinalCtaOpportunity[] from P2
       },
     },
   ];
